@@ -40,6 +40,13 @@ function fmt(n) {
   return Math.round(n * 10) / 10;
 }
 
+function parsePrice(value) {
+  if (!value) return 0;
+  const first = String(value).split('/')[0].trim().replace(/[^\d.,]/g, '').replace(',', '.');
+  const num = parseFloat(first);
+  return Number.isFinite(num) ? num : 0;
+}
+
 function getStickyOffset() {
   const masthead = document.querySelector('.masthead');
   const categoryNav = document.querySelector('.category-nav');
@@ -305,11 +312,23 @@ function renderPlate() {
     row.className = 'plate-item';
 
     row.innerHTML = `
-      <div>
-        <div class="plate-item-name">${item.name}</div>
-        ${typeof item.kcal === 'number' ? `<div class="plate-item-sub">${Math.round(item.kcal)} ккал</div>` : ''}
+      ${item.photo ? `<img class="plate-item-image" src="images/${item.photo}" alt="${item.name}">` : `<div class="plate-item-image plate-item-image-placeholder"></div>`}
+      <div class="plate-item-main">
+        <div class="plate-item-top">
+          <div class="plate-item-name">${item.name}</div>
+          ${item.price ? `<div class="plate-item-price">${item.price} ₽</div>` : ''}
+        </div>
+        ${
+          typeof item.kcal === 'number' || hasMacros(item)
+            ? `<div class="plate-item-sub">
+                ${typeof item.kcal === 'number' ? `${Math.round(item.kcal)} ккал` : ''}
+                ${typeof item.kcal === 'number' && hasMacros(item) ? ' · ' : ''}
+                ${hasMacros(item) ? `Б ${fmt(item.p)} · Ж ${fmt(item.f)} · У ${fmt(item.c)}` : ''}
+              </div>`
+            : ''
+        }
       </div>
-      <button class="plate-remove" data-index="${index}" type="button">Удалить</button>
+      <button class="plate-remove" data-index="${index}" type="button">Убрать</button>
     `;
 
     const removeBtn = row.querySelector('.plate-remove');
@@ -328,18 +347,24 @@ function renderPlate() {
     acc.p += item.p || 0;
     acc.f += item.f || 0;
     acc.c += item.c || 0;
+    acc.price += parsePrice(item.price);
     return acc;
-  }, { kcal: 0, p: 0, f: 0, c: 0 });
+  }, { kcal: 0, p: 0, f: 0, c: 0, price: 0 });
 
+  const summaryLabel = document.querySelector('.summary-label');
   const summaryKcal = document.getElementById('summary-kcal');
   const summaryMacros = document.getElementById('summary-macros');
 
+  if (summaryLabel) {
+    summaryLabel.textContent = 'Итого';
+  }
+
   if (summaryKcal) {
-    summaryKcal.textContent = `${Math.round(totals.kcal)} ккал`;
+    summaryKcal.textContent = `${totals.price} ₽`;
   }
 
   if (summaryMacros) {
-    summaryMacros.textContent = `Б ${fmt(totals.p)} · Ж ${fmt(totals.f)} · У ${fmt(totals.c)}`;
+    summaryMacros.textContent = `${Math.round(totals.kcal)} ккал · Б ${fmt(totals.p)} · Ж ${fmt(totals.f)} · У ${fmt(totals.c)}`;
   }
 }
 
