@@ -294,11 +294,28 @@ function addToPlate(item, ev) {
 function renderPlate() {
   plateList.innerHTML = '';
 
+  const summaryLabel = document.querySelector('.summary-label');
+  const summaryKcal = document.getElementById('summary-kcal');
+  const summaryMacros = document.getElementById('summary-macros');
+
   if (!state.plate.length) {
     plateEmpty.classList.remove('hidden');
     plateSummary.classList.add('hidden');
     plateCount.classList.add('hidden');
     plateCount.textContent = '0';
+
+    if (summaryLabel) {
+      summaryLabel.textContent = 'Итого';
+    }
+
+    if (summaryKcal) {
+      summaryKcal.textContent = '0 ₽';
+    }
+
+    if (summaryMacros) {
+      summaryMacros.textContent = '0 ккал · Б 0 · Ж 0 · У 0';
+    }
+
     return;
   }
 
@@ -350,10 +367,6 @@ function renderPlate() {
     acc.price += parsePrice(item.price);
     return acc;
   }, { kcal: 0, p: 0, f: 0, c: 0, price: 0 });
-
-  const summaryLabel = document.querySelector('.summary-label');
-  const summaryKcal = document.getElementById('summary-kcal');
-  const summaryMacros = document.getElementById('summary-macros');
 
   if (summaryLabel) {
     summaryLabel.textContent = 'Итого';
@@ -445,22 +458,7 @@ const clearPlateBtn = document.getElementById('clear-plate');
 if (clearPlateBtn) {
   clearPlateBtn.onclick = () => {
     state.plate = [];
-    plateList.innerHTML = '';
-    plateEmpty.classList.remove('hidden');
-    plateSummary.classList.add('hidden');
-    plateCount.classList.add('hidden');
-    plateCount.textContent = '0';
-
-    const summaryKcal = document.getElementById('summary-kcal');
-    const summaryMacros = document.getElementById('summary-macros');
-
-    if (summaryKcal) {
-      summaryKcal.textContent = '0 ккал';
-    }
-
-    if (summaryMacros) {
-      summaryMacros.textContent = 'Б 0 · Ж 0 · У 0';
-    }
+    renderPlate();
   };
 }
 
