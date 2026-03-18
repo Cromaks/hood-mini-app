@@ -161,22 +161,15 @@ function renderMenu() {
 function openDish(item) {
   state.modalClosing = false;
 
-  const description = item.description || '';
-  const isLongDescription = description.length > 120;
-
   modalContent.innerHTML = `
     <div class="detail-card">
       <div class="detail-wrap">
         ${item.photo ? `<img class="detail-image" src="images/${item.photo}" alt="${item.name}">` : ''}
         <div class="detail-name">${item.name}</div>
-
-${item.price ? `<div class="detail-price">${item.price} ₽</div>` : ''}
-
-${item.description ? `<div class="detail-description">${item.description}</div>` : ''}
-
-${typeof item.kcal === 'number' ? `<div class="detail-kcal">${Math.round(item.kcal)} ккал</div>` : ''}
-
-${hasMacros(item) ? `<div class="detail-macros">Б ${fmt(item.p)} · Ж ${fmt(item.f)} · У ${fmt(item.c)}</div>` : ''}
+        ${item.price ? `<div class="detail-price">${item.price} ₽</div>` : ''}
+        ${item.description ? `<div class="detail-description">${item.description}</div>` : ''}
+        ${typeof item.kcal === 'number' ? `<div class="detail-kcal">${Math.round(item.kcal)} ккал</div>` : ''}
+        ${hasMacros(item) ? `<div class="detail-macros">Б ${fmt(item.p)} · Ж ${fmt(item.f)} · У ${fmt(item.c)}</div>` : ''}
         <button class="primary-button" id="add-to-plate" type="button">Добавить в тарелку</button>
       </div>
     </div>
@@ -187,36 +180,34 @@ ${hasMacros(item) ? `<div class="detail-macros">Б ${fmt(item.p)} · Ж ${fmt(it
   modal.setAttribute('aria-hidden', 'false');
 
   const sheet = modal.querySelector('.modal-sheet');
+  const backdrop = modal.querySelector('.modal-backdrop');
+
   if (sheet) {
     sheet.classList.remove('closing');
     sheet.classList.add('opening');
     sheet.scrollTop = 0;
   }
 
+  if (backdrop) {
+    backdrop.classList.remove('closing');
+    backdrop.classList.add('opening');
+  }
+
   setTimeout(() => {
     modal.classList.remove('opening');
     if (sheet) sheet.classList.remove('opening');
+    if (backdrop) backdrop.classList.remove('opening');
   }, 320);
 
   const addBtn = document.getElementById('add-to-plate');
   if (addBtn) {
     addBtn.onclick = (e) => addToPlate(item, e);
   }
-
-  const moreBtn = document.getElementById('detail-more');
-  const descEl = document.getElementById('detail-description');
-
-  if (moreBtn && descEl) {
-    moreBtn.onclick = () => {
-      const collapsed = descEl.classList.contains('is-collapsed');
-      descEl.classList.toggle('is-collapsed', !collapsed);
-      moreBtn.textContent = collapsed ? 'Свернуть' : 'Показать полностью';
-    };
-  }
 }
 
 function hideModalImmediately() {
   modal.classList.add('hidden');
+  modal.classList.remove('opening', 'closing');
   modal.setAttribute('aria-hidden', 'true');
   state.modalClosing = false;
 
@@ -224,10 +215,13 @@ function hideModalImmediately() {
   const backdrop = modal.querySelector('.modal-backdrop');
 
   if (sheet) {
+    sheet.classList.remove('opening', 'closing');
     sheet.style.opacity = '';
     sheet.style.transform = '';
   }
+
   if (backdrop) {
+    backdrop.classList.remove('opening', 'closing');
     backdrop.style.opacity = '';
   }
 }
@@ -239,6 +233,7 @@ function closeDish() {
   state.modalClosing = true;
 
   const sheet = modal.querySelector('.modal-sheet');
+  const backdrop = modal.querySelector('.modal-backdrop');
 
   modal.classList.remove('opening');
   modal.classList.add('closing');
@@ -248,11 +243,14 @@ function closeDish() {
     sheet.classList.add('closing');
   }
 
+  if (backdrop) {
+    backdrop.classList.remove('opening');
+    backdrop.classList.add('closing');
+  }
+
   setTimeout(() => {
-    if (sheet) sheet.classList.remove('closing');
-    modal.classList.remove('closing');
     hideModalImmediately();
-  }, 200);
+  }, 220);
 }
 
 function addToPlate(item, ev) {
@@ -263,12 +261,12 @@ function addToPlate(item, ev) {
   if (button) {
     button.animate(
       [
-        { transform: 'scale(1)' },
-        { transform: 'scale(.98)' },
-        { transform: 'scale(1)' }
+        { transform: 'scale(1)', opacity: 1 },
+        { transform: 'scale(.97)', opacity: .96 },
+        { transform: 'scale(1)', opacity: 1 }
       ],
       {
-        duration: 140,
+        duration: 160,
         easing: 'ease-out'
       }
     );
@@ -279,9 +277,11 @@ function addToPlate(item, ev) {
 
   setTimeout(() => {
     animatePlateDrop(item.photo, ev);
-  }, 90);
+  }, 70);
 
-  closeDish();
+  setTimeout(() => {
+    closeDish();
+  }, 40);
 }
 
 function renderPlate() {
