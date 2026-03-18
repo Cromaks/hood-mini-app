@@ -427,48 +427,47 @@ function lockCategoryObserver() {
   clearTimeout(manualCategoryScrollTimer);
   manualCategoryScrollTimer = setTimeout(() => {
     isManualCategoryScroll = false;
-  }, 700);
+  }, 900);
 }
 
-const observer = new IntersectionObserver((entries) => {
+function updateCategoryByScroll() {
   if (isManualCategoryScroll) return;
+  if (state.currentView !== 'menu') return;
 
-  const visibleEntries = entries
-    .filter(entry => entry.isIntersecting)
-    .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+  const sections = Array.from(document.querySelectorAll('.menu-section'));
+  if (!sections.length) return;
 
-  if (!visibleEntries.length) {
-    if (window.scrollY < 120 && state.currentCategory !== 'Все меню') {
+  const triggerY = getStickyOffset() + 24;
+
+  if (window.scrollY < 80) {
+    if (state.currentCategory !== 'Все меню') {
       state.currentCategory = 'Все меню';
       updateActiveCategory();
     }
     return;
   }
 
-  const visible = visibleEntries[0];
-  const cat = visible.target.dataset.category;
+  let current = sections[0].dataset.category;
 
-  if (cat && state.currentCategory !== cat) {
-    state.currentCategory = cat;
+  sections.forEach(section => {
+    const rect = section.getBoundingClientRect();
+    if (rect.top <= triggerY) {
+      current = section.dataset.category;
+    }
+  });
+
+  if (current && state.currentCategory !== current) {
+    state.currentCategory = current;
     updateActiveCategory();
   }
-}, {
-  rootMargin: '-20% 0px -60% 0px',
-  threshold: [0.12, 0.25, 0.45, 0.65]
-});
-
-function attachSectionObservers() {
-  document.querySelectorAll('.menu-section').forEach(section => {
-    observer.observe(section);
-  });
 }
 
-window.addEventListener('scroll', () => {
-  if (window.scrollY < 120 && !isManualCategoryScroll && state.currentCategory !== 'Все меню') {
-    state.currentCategory = 'Все меню';
-    updateActiveCategory();
-  }
-}, { passive: true });
+function attachSectionObservers() {
+  updateCategoryByScroll();
+}
+
+window.addEventListener('scroll', updateCategoryByScroll, { passive: true });
+window.addEventListener('resize', updateCategoryByScroll);
 
 renderCategoryNav();
 renderMenu();
