@@ -161,13 +161,15 @@ function openDish(item) {
   state.modalClosing = false;
 
   modalContent.innerHTML = `
-    <div class="detail-wrap">
-      ${item.photo ? `<img class="detail-image" src="images/${item.photo}" alt="${item.name}">` : ''}
-      <div class="detail-name">${item.name}</div>
-      ${item.description ? `<div class="detail-description">${item.description}</div>` : ''}
-      ${typeof item.kcal === 'number' ? `<div class="detail-kcal">${Math.round(item.kcal)} ккал</div>` : ''}
-      ${hasMacros(item) ? `<div class="detail-macros">Б ${fmt(item.p)} · Ж ${fmt(item.f)} · У ${fmt(item.c)}</div>` : ''}
-      <button class="primary-button" id="add-to-plate" type="button">Добавить в тарелку</button>
+    <div class="detail-card">
+      <div class="detail-wrap">
+        ${item.photo ? `<img class="detail-image" src="images/${item.photo}" alt="${item.name}">` : ''}
+        <div class="detail-name">${item.name}</div>
+        ${item.description ? `<div class="detail-description">${item.description}</div>` : ''}
+        ${typeof item.kcal === 'number' ? `<div class="detail-kcal">${Math.round(item.kcal)} ккал</div>` : ''}
+        ${hasMacros(item) ? `<div class="detail-macros">Б ${fmt(item.p)} · Ж ${fmt(item.f)} · У ${fmt(item.c)}</div>` : ''}
+        <button class="primary-button" id="add-to-plate" type="button">Добавить в тарелку</button>
+      </div>
     </div>
   `;
 
