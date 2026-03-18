@@ -236,8 +236,16 @@ function renderPlate() {
     return acc;
   }, { kcal: 0, p: 0, f: 0, c: 0 });
 
-  document.getElementById('summary-kcal').textContent = `${Math.round(totals.kcal)} ккал`;
-  document.getElementById('summary-macros').textContent = `Б ${fmt(totals.p)} · Ж ${fmt(totals.f)} · У ${fmt(totals.c)}`;
+  const summaryKcal = document.getElementById('summary-kcal');
+  const summaryMacros = document.getElementById('summary-macros');
+
+  if (summaryKcal) {
+    summaryKcal.textContent = `${Math.round(totals.kcal)} ккал`;
+  }
+
+  if (summaryMacros) {
+    summaryMacros.textContent = `Б ${fmt(totals.p)} · Ж ${fmt(totals.f)} · У ${fmt(totals.c)}`;
+  }
 }
 
 function animatePlateDrop(photo, ev) {
@@ -317,7 +325,22 @@ const clearPlateBtn = document.getElementById('clear-plate');
 if (clearPlateBtn) {
   clearPlateBtn.onclick = () => {
     state.plate = [];
-    renderPlate();
+    plateList.innerHTML = '';
+    plateEmpty.classList.remove('hidden');
+    plateSummary.classList.add('hidden');
+    plateCount.classList.add('hidden');
+    plateCount.textContent = '0';
+
+    const summaryKcal = document.getElementById('summary-kcal');
+    const summaryMacros = document.getElementById('summary-macros');
+
+    if (summaryKcal) {
+      summaryKcal.textContent = '0 ккал';
+    }
+
+    if (summaryMacros) {
+      summaryMacros.textContent = 'Б 0 · Ж 0 · У 0';
+    }
   };
 }
 
