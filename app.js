@@ -292,11 +292,13 @@ function addToPlate(item, ev) {
     );
   }
 
-  state.plate.push(item);
+  state.plate.push({
+    ...item,
+    plateId: `${Date.now()}-${Math.random().toString(16).slice(2)}`
+  });
+
   renderPlate();
 
-  showToast('Добавлено в тарелку');
-  
   setTimeout(() => {
     animatePlateDrop(item.photo, ev);
   }, 70);
@@ -339,7 +341,7 @@ function renderPlate() {
   plateCount.classList.remove('hidden');
   plateCount.textContent = state.plate.length;
 
-  state.plate.forEach((item, index) => {
+  state.plate.forEach((item) => {
     const row = document.createElement('div');
     row.className = 'plate-item';
 
@@ -352,22 +354,20 @@ function renderPlate() {
         </div>
         ${typeof item.kcal === 'number' ? `<div class="plate-item-sub">${Math.round(item.kcal)} ккал</div>` : ''}
       </div>
-      <button class="plate-remove" data-index="${index}" type="button">Убрать</button>
+      <button class="plate-remove" data-id="${item.plateId}" type="button">Убрать</button>
     `;
 
     const removeBtn = row.querySelector('.plate-remove');
     if (removeBtn) {
       removeBtn.onclick = () => {
-        state.plate.splice(index, 1);
-        renderPlate();
-        row.style.transition = 'all .2s ease';
-  row.style.transform = 'scale(.95)';
-  row.style.opacity = '0';
+        row.style.transition = 'all .18s ease';
+        row.style.transform = 'scale(.97)';
+        row.style.opacity = '0';
 
-  setTimeout(() => {
-    state.plate.splice(index, 1);
-    renderPlate();
-  }, 180);
+        setTimeout(() => {
+          state.plate = state.plate.filter(x => x.plateId !== item.plateId);
+          renderPlate();
+        }, 180);
       };
     }
 
