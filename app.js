@@ -169,18 +169,14 @@ function openDish(item) {
       <div class="detail-wrap">
         ${item.photo ? `<img class="detail-image" src="images/${item.photo}" alt="${item.name}">` : ''}
         <div class="detail-name">${item.name}</div>
-        ${
-          description
-            ? `<div class="detail-description ${isLongDescription ? 'is-collapsed' : ''}" id="detail-description">${description}</div>`
-            : ''
-        }
-        ${
-          isLongDescription
-            ? `<button class="detail-more" id="detail-more" type="button">Показать полностью</button>`
-            : ''
-        }
-        ${typeof item.kcal === 'number' ? `<div class="detail-kcal">${Math.round(item.kcal)} ккал</div>` : ''}
-        ${hasMacros(item) ? `<div class="detail-macros">Б ${fmt(item.p)} · Ж ${fmt(item.f)} · У ${fmt(item.c)}</div>` : ''}
+
+${item.price ? `<div class="detail-price">${item.price} ₽</div>` : ''}
+
+${item.description ? `<div class="detail-description">${item.description}</div>` : ''}
+
+${typeof item.kcal === 'number' ? `<div class="detail-kcal">${Math.round(item.kcal)} ккал</div>` : ''}
+
+${hasMacros(item) ? `<div class="detail-macros">Б ${fmt(item.p)} · Ж ${fmt(item.f)} · У ${fmt(item.c)}</div>` : ''}
         <button class="primary-button" id="add-to-plate" type="button">Добавить в тарелку</button>
       </div>
     </div>
