@@ -155,14 +155,20 @@ body{
   text-decoration:none;
 }
 
-.food-kcal{
+.food-price{
   font-size:15px;
   color:var(--ink);
   margin-bottom:6px;
 }
 
-.food-macros{
+.food-kcal{
   font-size:14px;
+  color:var(--ink);
+  margin-bottom:4px;
+}
+
+.food-macros{
+  font-size:13px;
   color:var(--muted);
   line-height:1.4;
 }
