@@ -167,8 +167,6 @@ function openDish(item) {
       ${item.description ? `<div class="detail-description">${item.description}</div>` : ''}
       ${typeof item.kcal === 'number' ? `<div class="detail-kcal">${Math.round(item.kcal)} ккал</div>` : ''}
       ${hasMacros(item) ? `<div class="detail-macros">Б ${fmt(item.p)} · Ж ${fmt(item.f)} · У ${fmt(item.c)}</div>` : ''}
-    </div>
-    <div class="detail-footer">
       <button class="primary-button" id="add-to-plate" type="button">Добавить в тарелку</button>
     </div>
   `;
