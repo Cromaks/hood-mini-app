@@ -303,10 +303,36 @@ body{
   font-size:16px;
   line-height:1.65;
   color:var(--muted);
-  margin-bottom:20px;
+  margin-bottom:16px;
   max-width:92%;
+}
+
+.detail-description.is-collapsed{
   max-height:140px;
   overflow:hidden;
+  position:relative;
+}
+
+.detail-description.is-collapsed::after{
+  content:'';
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  height:34px;
+  background:linear-gradient(to bottom, rgba(246,241,232,0), rgba(246,241,232,1));
+}
+
+.detail-more{
+  border:none;
+  background:transparent;
+  padding:0;
+  margin:0 0 20px;
+  font-size:13px;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+  color:var(--muted);
+  cursor:pointer;
 }
 
 .detail-description::after{
