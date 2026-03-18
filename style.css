@@ -299,7 +299,7 @@ body{
 }
 
 .modal-sheet.closing{
-  animation:modalSheetOut .2s cubic-bezier(.22,.8,.24,1) forwards;
+  animation:modalSheetOut .16s cubic-bezier(.22,.8,.24,1) forwards;
 }
 
 /* ===== ДЕТАЛКА ===== */
