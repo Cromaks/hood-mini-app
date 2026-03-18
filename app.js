@@ -75,6 +75,7 @@ function renderCategoryNav() {
     btn.onclick = () => {
       state.currentCategory = cat;
       updateActiveCategory();
+      lockCategoryObserver();
       scrollToCategory(cat);
     };
 
@@ -118,7 +119,7 @@ function renderMenu() {
           </div>
         `;
 
-        card.onclick = () => openDish(item, category);
+        card.onclick = () => openDish(item);
         grid.appendChild(card);
       });
 
@@ -132,13 +133,15 @@ function renderMenu() {
       textItems.forEach(item => {
         const row = document.createElement('div');
         row.className = 'text-item';
+
         row.innerHTML = `
           <div>
             <div class="text-item-name">${item.name}</div>
             ${item.description ? `<div class="text-item-sub">${item.description}</div>` : ''}
           </div>
         `;
-        row.onclick = () => openDish(item, category);
+
+        row.onclick = () => openDish(item);
         list.appendChild(row);
       });
 
@@ -149,7 +152,7 @@ function renderMenu() {
   });
 }
 
-function openDish(item, category) {
+function openDish(item) {
   modalContent.innerHTML = `
     <div class="detail-wrap">
       ${item.photo ? `<img class="detail-image" src="images/${item.photo}" alt="${item.name}">` : ''}
@@ -164,7 +167,10 @@ function openDish(item, category) {
   modal.classList.remove('hidden');
   modal.setAttribute('aria-hidden', 'false');
 
-  document.getElementById('add-to-plate').onclick = (e) => addToPlate(item, e);
+  const addBtn = document.getElementById('add-to-plate');
+  if (addBtn) {
+    addBtn.onclick = (e) => addToPlate(item, e);
+  }
 }
 
 function closeDish() {
@@ -186,6 +192,7 @@ function renderPlate() {
     plateEmpty.classList.remove('hidden');
     plateSummary.classList.add('hidden');
     plateCount.classList.add('hidden');
+    plateCount.textContent = '0';
     return;
   }
 
@@ -206,10 +213,13 @@ function renderPlate() {
       <button class="plate-remove" data-index="${index}" type="button">Удалить</button>
     `;
 
-    row.querySelector('.plate-remove').onclick = () => {
-      state.plate.splice(index, 1);
-      renderPlate();
-    };
+    const removeBtn = row.querySelector('.plate-remove');
+    if (removeBtn) {
+      removeBtn.onclick = () => {
+        state.plate.splice(index, 1);
+        renderPlate();
+      };
+    }
 
     plateList.appendChild(row);
   });
@@ -230,6 +240,8 @@ function animatePlateDrop(photo, ev) {
   if (!photo) return;
 
   const fly = document.getElementById('plate-fly');
+  if (!fly) return;
+
   fly.innerHTML = `<img src="images/${photo}" alt="">`;
   fly.classList.remove('hidden');
 
@@ -237,6 +249,8 @@ function animatePlateDrop(photo, ev) {
   const startY = ev?.clientY || window.innerHeight / 2;
 
   const targetBtn = document.querySelector('[data-view="plate"]');
+  if (!targetBtn) return;
+
   const targetRect = targetBtn.getBoundingClientRect();
 
   const endX = targetRect.left + targetRect.width / 2 - 36;
@@ -268,7 +282,8 @@ function switchView(view) {
   state.currentView = view;
 
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-  document.getElementById(`view-${view}`).classList.add('active');
+  const activeView = document.getElementById(`view-${view}`);
+  if (activeView) activeView.classList.add('active');
 
   document.querySelectorAll('.nav-btn').forEach(b => {
     b.classList.toggle('active', b.dataset.view === view);
@@ -285,15 +300,22 @@ document.querySelectorAll('.nav-btn').forEach(btn => {
   btn.onclick = () => switchView(btn.dataset.view);
 });
 
-document.getElementById('modal-close').onclick = closeDish;
+const modalClose = document.getElementById('modal-close');
+if (modalClose) {
+  modalClose.onclick = closeDish;
+}
+
 modal.addEventListener('click', (e) => {
   if (e.target.dataset.close) closeDish();
 });
 
-document.getElementById('clear-plate').onclick = () => {
-  state.plate = [];
-  renderPlate();
-};
+const clearPlateBtn = document.getElementById('clear-plate');
+if (clearPlateBtn) {
+  clearPlateBtn.onclick = () => {
+    state.plate = [];
+    renderPlate();
+  };
+}
 
 let isManualCategoryScroll = false;
 let manualCategoryScrollTimer = null;
@@ -328,7 +350,6 @@ const observer = new IntersectionObserver((entries) => {
     state.currentCategory = cat;
     updateActiveCategory();
   }
-
 }, {
   rootMargin: '-20% 0px -60% 0px',
   threshold: [0.12, 0.25, 0.45, 0.65]
@@ -346,12 +367,6 @@ window.addEventListener('scroll', () => {
     updateActiveCategory();
   }
 }, { passive: true });
-
-nav.addEventListener('click', (e) => {
-  if (e.target.classList.contains('category-chip')) {
-    lockCategoryObserver();
-  }
-});
 
 renderCategoryNav();
 renderMenu();
