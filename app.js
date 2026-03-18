@@ -160,12 +160,24 @@ function renderMenu() {
 function openDish(item) {
   state.modalClosing = false;
 
+  const description = item.description || '';
+  const isLongDescription = description.length > 120;
+
   modalContent.innerHTML = `
     <div class="detail-card">
       <div class="detail-wrap">
         ${item.photo ? `<img class="detail-image" src="images/${item.photo}" alt="${item.name}">` : ''}
         <div class="detail-name">${item.name}</div>
-        ${item.description ? `<div class="detail-description">${item.description}</div>` : ''}
+        ${
+          description
+            ? `<div class="detail-description ${isLongDescription ? 'is-collapsed' : ''}" id="detail-description">${description}</div>`
+            : ''
+        }
+        ${
+          isLongDescription
+            ? `<button class="detail-more" id="detail-more" type="button">Показать полностью</button>`
+            : ''
+        }
         ${typeof item.kcal === 'number' ? `<div class="detail-kcal">${Math.round(item.kcal)} ккал</div>` : ''}
         ${hasMacros(item) ? `<div class="detail-macros">Б ${fmt(item.p)} · Ж ${fmt(item.f)} · У ${fmt(item.c)}</div>` : ''}
         <button class="primary-button" id="add-to-plate" type="button">Добавить в тарелку</button>
@@ -192,6 +204,17 @@ function openDish(item) {
   const addBtn = document.getElementById('add-to-plate');
   if (addBtn) {
     addBtn.onclick = (e) => addToPlate(item, e);
+  }
+
+  const moreBtn = document.getElementById('detail-more');
+  const descEl = document.getElementById('detail-description');
+
+  if (moreBtn && descEl) {
+    moreBtn.onclick = () => {
+      const collapsed = descEl.classList.contains('is-collapsed');
+      descEl.classList.toggle('is-collapsed', !collapsed);
+      moreBtn.textContent = collapsed ? 'Свернуть' : 'Показать полностью';
+    };
   }
 }
 
