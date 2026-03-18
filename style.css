@@ -122,6 +122,8 @@ body{
   text-align:left;
   cursor:pointer;
   animation:fadeUp .45s ease both;
+  
+  display:block;
 }
 
 .food-image{
@@ -134,30 +136,31 @@ body{
 }
 
 .food-meta{
-  padding:12px 2px 0;
+  padding:16px 2px 0;
 }
 
 /* 🔥 УБРАЛ СИНИЙ, СДЕЛАЛ ЧЁРНЫЙ */
 
 .food-name{
   font-family:Georgia,"Times New Roman",serif;
-  font-size:24px;
-  line-height:1.15;
-  margin:0 0 8px;
+  font-size:26px;
+  line-height:1.12;
+  margin:0 0 10px;
   font-weight:500;
   color:var(--ink);
   text-decoration:none;
 }
 
 .food-kcal{
-  font-size:14px;
+  font-size:15px;
   color:var(--ink);
-  margin-bottom:4px;
+  margin-bottom:6px;
 }
 
 .food-macros{
-  font-size:13px;
+  font-size:14px;
   color:var(--muted);
+  line-height:1.4;
 }
 
 /* ===== ТЕКСТОВЫЕ БЛЮДА ===== */
