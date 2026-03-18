@@ -462,7 +462,7 @@ body{
 }
 
 .modal-sheet.closing{
-  animation: modalSheetOut .28s cubic-bezier(.22,.8,.24,1) forwards;
+  animation: modalSheetOut .2s cubic-bezier(.22,.8,.24,1) forwards;
 }
 
 .modal-backdrop.closing{
@@ -489,7 +489,7 @@ body{
   }
 }
 .modal-sheet.opening{
-  animation: modalSheetIn .34s cubic-bezier(.22,.8,.24,1) forwards;
+  animation: modalSheetIn .32s cubic-bezier(.22,.8,.24,1) forwards;
 }
 
 .modal-backdrop.opening{
@@ -516,11 +516,11 @@ body{
   }
 }
 .modal.closing{
-  animation: modalFadeOut .26s ease forwards;
+  animation: modalFadeOut .2s ease forwards;
 }
 
 .modal.opening{
-  animation: modalFadeIn .24s ease forwards;
+  animation: modalFadeIn .28s ease forwards;
 }
 
 @keyframes modalFadeIn{
