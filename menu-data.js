@@ -96,48 +96,171 @@ window.MENU_DATA = {
       }
     ],
 
-    "Кофе": [
-      { name: "Фильтр", photo: "filter.webp" },
-      { name: "Эспрессо", photo: "espresso.webp" },
-      { name: "Капучино", photo: "cappuccino.webp" },
-      { name: "Латте", photo: "latte.webp" },
-      { name: "Флэт-уайт", photo: "flat_white.webp" },
-      { name: "Раф-кофе", photo: "raf_coffee.webp" },
-      { name: "Бамбл кофе", photo: "bumble_coffee.webp" },
-      { name: "Эспрессо-тоник", photo: "espresso_tonic.webp" },
+ "Кофе": [
+  {
+    name: "Фильтр",
+    photo: "filter.webp",
+    description: "Насыщенный кофе, сваренный альтернативным методом с помощью капельной кофеварки. Постоянно меняем сорта зерен и знакомим вас с ними"
+  },
+  {
+    name: "Эспрессо",
+    photo: "espresso.webp",
+    description: "Бодрящий шот кофе, приготовленный на смеси зёрен из Бразилии и Эфиопии. Фундамент всех наших кофейных напитков"
+  },
+  {
+    name: "Капучино",
+    photo: "cappuccino.webp",
+    description: "Мягкий кофейный напиток на основе эспрессо и молока с красивыми рисунками от наших бариста"
+  },
+  {
+    name: "Латте",
+    photo: "latte.webp",
+    description: "Легкий молочный напиток с небольшим количеством кофе"
+  },
+  {
+    name: "Флэт-уайт",
+    photo: "flat_white.webp",
+    description: "Крепкий кофейно-молочный напиток с минимальной пенкой"
+  },
+  {
+    name: "Раф-кофе",
+    photo: "raf_coffee.webp",
+    description: "Сладкий сливочный напиток с воздушной нежной пенкой"
+  },
+  {
+    name: "Бамбл кофе",
+    photo: "bumble_coffee.webp",
+    description: "Апельсиновый сок, эспрессо, сироп солёная карамель"
+  },
+  {
+    name: "Эспрессо-тоник",
+    photo: "espresso_tonic.webp",
+    description: "Эспрессо, тоник, лёд"
+  },
 
-      { name: "Сырный раф", photo: "cheese_raf.webp" },
-      { name: "Раф копченая груша", photo: "raf_smoked_pear.webp" },
-      { name: "Латте синнабон", photo: "latte_cinnabon.webp" },
-      { name: "Раф солёный арахис", photo: "raf_salted_peanut.webp" },
-      { name: "Мокко", photo: "mocha.webp" },
-      { name: "Фильтр коктейль", photo: "filter_cocktail.webp" },
-      { name: "Банановый раф", photo: "banana_raf.webp" },
-      { name: "Лимонный пирог", photo: "lemon_pie.webp" }
-    ],
-
-    "Не кофе": [
-      { name: "Матча-латте", photo: "matcha_latte.webp" },
-      { name: "Ходзича", photo: "hojicha.webp" },
-      { name: "Какао", photo: "cocoa.webp" },
-      { name: "Фисташковое какао", photo: "pistachio_cocoa.webp" },
-      { name: "Банановое какао", photo: "banana_cocoa.webp" }
-    ],
-
-    "Чай": [
-      { name: "Ежевичный глинтвейн", photo: "blackberry_mulled.webp" },
-      { name: "Пунш вишня-гибискус", photo: "cherry_hibiscus_punch.webp" },
-      { name: "Цитрусовый пунш", photo: "citrus_punch.webp" },
-      { name: "Облепиховый чай", photo: "sea_buckthorn_tea.webp" },
-      { name: "Домашний сбор с вареньем", photo: "homemade_blend_with_jam.webp" },
-      { name: "Китайский чай", photo: "chinese_tea.webp" }
-    ],
-
-    "Бабл ти": [
-      { name: "Сникерс", photo: "snickers.webp" },
-      { name: "Хун-ло сливочная карамель", photo: "hun_lo_creamy_caramel.webp" },
-      { name: "Карамельная далгона", photo: "caramel_dalgona.webp" },
-      { name: "Матча", photo: "matcha.webp" }
-    ]
+  {
+    name: "Сырный раф",
+    photo: "cheese_raf.webp",
+    description: "Классический раф с ванильным сахаром и сырной шапочкой из взбитого соуса (креметта, дорблю, сливки)"
+  },
+  {
+    name: "Раф копченая груша",
+    photo: "raf_smoked_pear.webp",
+    description: "Классический раф на основе домашнего грушевого соуса с украшением из сушеной груши"
+  },
+  {
+    name: "Латте синнабон",
+    photo: "latte_cinnabon.webp",
+    description: "Напиток на карамельно-молочной основе с добавлением сырного соуса и ванильного сахара с корицей"
+  },
+  {
+    name: "Раф солёный арахис",
+    photo: "raf_salted_peanut.webp",
+    description: "Классический раф на основе домашней арахисовой пасты с посыпкой из жареного арахиса"
+  },
+  {
+    name: "Мокко",
+    photo: "mocha.webp",
+    description: "Авторский напиток на основе сливочного соуса из креметты, какао и мёда с добавлением шота эспрессо"
+  },
+  {
+    name: "Фильтр коктейль",
+    photo: "filter_cocktail.webp",
+    description: "Горячий фильтр-кофе с прохладной шапочкой из взбитых сливок с сиропом солёная карамель. Сверху украшается цедрой апельсина"
+  },
+  {
+    name: "Банановый раф",
+    photo: "banana_raf.webp",
+    description: "Раф на основе домашнего бананового и сырного соусов с посыпкой из бананового гарниша и куркумы"
+  },
+  {
+    name: "Лимонный пирог",
+    photo: "lemon_pie.webp",
+    description: "Авторский латте на сливочной основе, вываренной с цедрой лимона. Сверху посыпаем сублимированной малиной"
   }
+],
+
+"Не кофе": [
+  {
+    name: "Матча-латте",
+    photo: "matcha_latte.webp",
+    description: "Латте на основе тонизирующего чая матча"
+  },
+  {
+    name: "Ходзича",
+    photo: "hojicha.webp",
+    description: "Латте на основе измельченного японского зеленого чая"
+  },
+  {
+    name: "Какао",
+    photo: "cocoa.webp",
+    description: "Самый классический молочный какао с добавлением ванильного сахара"
+  },
+  {
+    name: "Фисташковое какао",
+    photo: "pistachio_cocoa.webp",
+    description: "Классическое какао на основе домашней фисташковой пасты с посыпкой из крошки фисташки"
+  },
+  {
+    name: "Банановое какао",
+    photo: "banana_cocoa.webp",
+    description: "Классическое какао на основе домашнего бананового соуса с посыпкой из банановых чипсов"
+  }
+],
+
+"Чай": [
+  {
+    name: "Ежевичный глинтвейн",
+    photo: "blackberry_mulled.webp",
+    description: "Согревающий напиток на домашней ежевичной основе с добавлением корицы и дольки лимона"
+  },
+  {
+    name: "Пунш вишня-гибискус",
+    photo: "cherry_hibiscus_punch.webp",
+    description: "Согревающий чай каркаде на основе соуса из вишни"
+  },
+  {
+    name: "Цитрусовый пунш",
+    photo: "citrus_punch.webp",
+    description: "Согревающий пунш на основе настоянного зелёного чая с цедрой и соком цитрусовых. Украшаем дольками апельсина и лимона"
+  },
+  {
+    name: "Облепиховый чай",
+    photo: "sea_buckthorn_tea.webp",
+    description: "Согревающий чай на основе натуральной облепихи"
+  },
+  {
+    name: "Домашний сбор с вареньем",
+    photo: "homemade_blend_with_jam.webp",
+    description: "Горячий чай на сборе трав с вареньем"
+  },
+  {
+    name: "Китайский чай",
+    photo: "chinese_tea.webp",
+    description: "Чёрный или зелёный натуральный листовой чай"
+  }
+],
+
+"Бабл ти": [
+  {
+    name: "Сникерс",
+    photo: "snickers.webp",
+    description: "Тапиока, лёд, молоко, смесь арахисовой пасты и домашнего соуса мокко, посыпка из крошки арахиса"
+  },
+  {
+    name: "Хун-ло сливочная карамель",
+    photo: "hun_lo_creamy_caramel.webp",
+    description: "Тапиока, чёрный чай Хун-Ло, шапочка из взбитых сливок с сиропом солёная карамель"
+  },
+  {
+    name: "Карамельная далгона",
+    photo: "caramel_dalgona.webp",
+    description: "Тапиока, молоко, кофейная шапочка с сиропом солёная карамель"
+  },
+  {
+    name: "Матча",
+    photo: "matcha.webp",
+    description: "Тапиока, молоко, лёд, матча синяя или зелёная. Можно добавить сироп: клубника или манго"
+  }
+]
 };
