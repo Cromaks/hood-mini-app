@@ -11,6 +11,10 @@ const nav = document.getElementById('category-nav');
 const sectionsWrap = document.getElementById('menu-sections');
 const modal = document.getElementById('dish-modal');
 const modalContent = document.getElementById('modal-content');
+
+modal.classList.add('hidden');
+modal.setAttribute('aria-hidden', 'true');
+
 const plateList = document.getElementById('plate-list');
 const plateEmpty = document.getElementById('plate-empty');
 const plateSummary = document.getElementById('plate-summary');
