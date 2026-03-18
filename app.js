@@ -1,7 +1,8 @@
 const state = {
   currentView: 'menu',
   plate: [],
-  currentCategory: 'Все меню'
+  currentCategory: 'Все меню',
+  modalClosing: false
 };
 
 const categories = window.MENU_DATA.categories;
@@ -157,6 +158,8 @@ function renderMenu() {
 }
 
 function openDish(item) {
+  state.modalClosing = false;
+
   modalContent.innerHTML = `
     <div class="detail-wrap">
       ${item.photo ? `<img class="detail-image" src="images/${item.photo}" alt="${item.name}">` : ''}
@@ -171,21 +174,108 @@ function openDish(item) {
   modal.classList.remove('hidden');
   modal.setAttribute('aria-hidden', 'false');
 
+  const sheet = modal.querySelector('.modal-sheet');
+  const backdrop = modal.querySelector('.modal-backdrop');
+
+  if (sheet) {
+    sheet.style.transform = 'translateY(0)';
+    sheet.style.opacity = '1';
+  }
+  if (backdrop) {
+    backdrop.style.opacity = '1';
+  }
+
   const addBtn = document.getElementById('add-to-plate');
   if (addBtn) {
     addBtn.onclick = (e) => addToPlate(item, e);
   }
 }
 
-function closeDish() {
+function hideModalImmediately() {
   modal.classList.add('hidden');
   modal.setAttribute('aria-hidden', 'true');
+  state.modalClosing = false;
+
+  const sheet = modal.querySelector('.modal-sheet');
+  const backdrop = modal.querySelector('.modal-backdrop');
+
+  if (sheet) {
+    sheet.style.opacity = '';
+    sheet.style.transform = '';
+  }
+  if (backdrop) {
+    backdrop.style.opacity = '';
+  }
+}
+
+function closeDish() {
+  if (modal.classList.contains('hidden')) return;
+  if (state.modalClosing) return;
+
+  state.modalClosing = true;
+
+  const sheet = modal.querySelector('.modal-sheet');
+  const backdrop = modal.querySelector('.modal-backdrop');
+
+  if (sheet) {
+    sheet.animate(
+      [
+        { transform: 'translateY(0)', opacity: 1 },
+        { transform: 'translateY(32px)', opacity: 0 }
+      ],
+      {
+        duration: 260,
+        easing: 'cubic-bezier(.2,.8,.2,1)',
+        fill: 'forwards'
+      }
+    );
+  }
+
+  if (backdrop) {
+    backdrop.animate(
+      [
+        { opacity: 1 },
+        { opacity: 0 }
+      ],
+      {
+        duration: 220,
+        easing: 'ease-out',
+        fill: 'forwards'
+      }
+    );
+  }
+
+  setTimeout(() => {
+    hideModalImmediately();
+  }, 260);
 }
 
 function addToPlate(item, ev) {
+  if (state.modalClosing) return;
+
+  const button = ev?.currentTarget;
+
+  if (button) {
+    button.animate(
+      [
+        { transform: 'scale(1)' },
+        { transform: 'scale(.98)' },
+        { transform: 'scale(1)' }
+      ],
+      {
+        duration: 140,
+        easing: 'ease-out'
+      }
+    );
+  }
+
   state.plate.push(item);
   renderPlate();
-  animatePlateDrop(item.photo, ev);
+
+  setTimeout(() => {
+    animatePlateDrop(item.photo, ev);
+  }, 90);
+
   closeDish();
 }
 
