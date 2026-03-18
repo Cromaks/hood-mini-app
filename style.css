@@ -466,3 +466,47 @@ body{
 .plate-fly.hidden{
   display:none !important;
 }
+.modal-backdrop{
+  will-change: opacity;
+}
+
+.modal-sheet{
+  will-change: transform, opacity;
+  transform-origin: bottom center;
+}
+
+.primary-button{
+  transition: transform .14s ease, box-shadow .18s ease, opacity .18s ease;
+}
+
+.primary-button:active{
+  transform: scale(.985);
+}
+
+.modal-sheet.closing{
+  animation: modalSheetOut .28s cubic-bezier(.22,.8,.24,1) forwards;
+}
+
+.modal-backdrop.closing{
+  animation: modalBackdropOut .22s ease forwards;
+}
+
+@keyframes modalSheetOut{
+  from{
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to{
+    transform: translateY(34px);
+    opacity: 0;
+  }
+}
+
+@keyframes modalBackdropOut{
+  from{
+    opacity: 1;
+  }
+  to{
+    opacity: 0;
+  }
+}
