@@ -111,7 +111,7 @@ body{
 .food-grid{
   display:grid;
   grid-template-columns:1fr;
-  gap:22px;
+  gap:32px;
 }
 
 .food-card{
@@ -124,6 +124,7 @@ body{
   animation:fadeUp .45s ease both;
   
   display:block;
+  margin-bottom:6px;
 }
 
 .food-image{
@@ -131,23 +132,26 @@ body{
   aspect-ratio:1/1;
   object-fit:cover;
   display:block;
-  border-radius:18px;
+  border-radius:20px;
   background:#e9e2d6;
+  
+  box-shadow:0 6px 18px rgba(0,0,0,.06);
 }
 
 .food-meta{
-  padding:16px 2px 0;
+  padding:18px 4px 0;
 }
 
 /* 🔥 УБРАЛ СИНИЙ, СДЕЛАЛ ЧЁРНЫЙ */
 
 .food-name{
   font-family:Georgia,"Times New Roman",serif;
-  font-size:26px;
-  line-height:1.12;
-  margin:0 0 10px;
+  font-size:29px;
+  line-height:1.08;
+  margin:0 0 12px;
   font-weight:500;
   color:var(--ink);
+  letter-spacing:-0.01em;
   text-decoration:none;
 }
 
