@@ -178,12 +178,19 @@ function openDish(item) {
   const backdrop = modal.querySelector('.modal-backdrop');
 
   if (sheet) {
-    sheet.style.transform = 'translateY(0)';
-    sheet.style.opacity = '1';
+    sheet.classList.remove('closing');
+    sheet.classList.add('opening');
   }
+
   if (backdrop) {
-    backdrop.style.opacity = '1';
+    backdrop.classList.remove('closing');
+    backdrop.classList.add('opening');
   }
+
+  setTimeout(() => {
+    if (sheet) sheet.classList.remove('opening');
+    if (backdrop) backdrop.classList.remove('opening');
+  }, 340);
 
   const addBtn = document.getElementById('add-to-plate');
   if (addBtn) {
