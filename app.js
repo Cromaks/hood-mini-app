@@ -360,6 +360,14 @@ function renderPlate() {
       removeBtn.onclick = () => {
         state.plate.splice(index, 1);
         renderPlate();
+        row.style.transition = 'all .2s ease';
+  row.style.transform = 'scale(.95)';
+  row.style.opacity = '0';
+
+  setTimeout(() => {
+    state.plate.splice(index, 1);
+    renderPlate();
+  }, 180);
       };
     }
 
