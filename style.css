@@ -201,6 +201,10 @@ body{
 .view{display:none}
 .view.active{display:block}
 
+.hidden{
+  display:none !important;
+}
+
 /* ===== НИЖНЯЯ НАВИГАЦИЯ ===== */
 
 .bottom-nav{
