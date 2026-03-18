@@ -443,11 +443,12 @@ body{
 }
 
 .plate-item{
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-start;
+  position:relative;
+  display:grid;
+  grid-template-columns:64px 1fr;
   gap:16px;
-  padding:18px 18px;
+  align-items:start;
+  padding:18px 18px 18px 18px;
   background:rgba(251,248,242,.88);
   border:1px solid rgba(220,215,207,.72);
   border-radius:20px;
@@ -455,33 +456,33 @@ body{
 }
 
 .plate-item-name{
-  font-size:19px;
-  line-height:1.28;
+  font-size:18px;
+  line-height:1.22;
   color:var(--ink);
-  margin-bottom:6px;
+  margin-bottom:0;
 }
 
 .plate-item-sub{
-  font-size:12px;
-  color:#8A8A8A;
-  letter-spacing:.02em;
+  font-size:13px;
+  color:var(--muted);
   line-height:1.45;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
+  white-space:normal;
+  overflow:visible;
+  text-overflow:unset;
 }
 
 .plate-remove{
+  position:absolute;
+  top:18px;
+  right:18px;
   border:none;
   background:transparent;
-  font-size:11px;
   color:#9A9A9A;
+  font-size:11px;
   letter-spacing:.12em;
   text-transform:uppercase;
   padding:0;
-  margin-top:2px;
   cursor:pointer;
-  white-space:nowrap;
 }
 
 .plate-remove:active{
@@ -630,14 +631,15 @@ body{
 
 .plate-item-main{
   min-width:0;
+  padding-right:88px;
 }
 
 .plate-item-top{
   display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:12px;
-  margin-bottom:6px;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:6px;
+  margin-bottom:8px;
 }
 
 .plate-item-price{
