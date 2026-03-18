@@ -253,9 +253,13 @@ body{
 /* 🔥 аккуратный крестик */
 
 .modal-close{
-  position:absolute;
+  position:sticky;
   top:14px;
+  margin-left:auto;
   right:14px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
   width:36px;
   height:36px;
   border:none;
@@ -265,6 +269,7 @@ body{
   color:var(--muted);
   cursor:pointer;
   box-shadow:0 4px 12px rgba(0,0,0,.06);
+  z-index:10;
 }
 
 /* ===== ДЕТАЛКА ===== */
@@ -453,6 +458,7 @@ body{
   bottom:0;
   display:flex;
   flex-direction:column;
+  padding-top:14px;
 
   width:100%;
   max-width:460px;
