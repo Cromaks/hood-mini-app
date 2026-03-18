@@ -438,7 +438,7 @@ body{
 .plate-list{
   display:flex;
   flex-direction:column;
-  gap:16px;
+  gap:18px;
   margin-bottom:28px;
 }
 
@@ -448,10 +448,10 @@ body{
   grid-template-columns:64px 1fr;
   gap:16px;
   align-items:start;
-  padding:18px 18px 18px 18px;
+  padding:20px;
   background:rgba(251,248,242,.88);
   border:1px solid rgba(220,215,207,.72);
-  border-radius:20px;
+  border-radius:22px;
   box-shadow:0 8px 22px rgba(0,0,0,.035);
 }
 
@@ -578,6 +578,7 @@ body{
   opacity:1;
   transform:translateX(-50%) translateY(0);
 }
+
 
 /* ===== АНИМАЦИИ ===== */
 
