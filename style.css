@@ -240,6 +240,8 @@ body{
   inset:0;
   z-index:60;
   background:rgba(0,0,0,.22);
+  opacity:1;
+  will-change:opacity;
 }
 
 .modal-backdrop{
@@ -512,4 +514,21 @@ body{
   to{
     opacity: 1;
   }
+}
+.modal.closing{
+  animation: modalFadeOut .26s ease forwards;
+}
+
+.modal.opening{
+  animation: modalFadeIn .24s ease forwards;
+}
+
+@keyframes modalFadeIn{
+  from{ opacity:0; }
+  to{ opacity:1; }
+}
+
+@keyframes modalFadeOut{
+  from{ opacity:1; }
+  to{ opacity:0; }
 }
