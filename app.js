@@ -218,36 +218,18 @@ function closeDish() {
   const backdrop = modal.querySelector('.modal-backdrop');
 
   if (sheet) {
-    sheet.animate(
-      [
-        { transform: 'translateY(0)', opacity: 1 },
-        { transform: 'translateY(32px)', opacity: 0 }
-      ],
-      {
-        duration: 260,
-        easing: 'cubic-bezier(.2,.8,.2,1)',
-        fill: 'forwards'
-      }
-    );
+    sheet.classList.add('closing');
   }
 
   if (backdrop) {
-    backdrop.animate(
-      [
-        { opacity: 1 },
-        { opacity: 0 }
-      ],
-      {
-        duration: 220,
-        easing: 'ease-out',
-        fill: 'forwards'
-      }
-    );
+    backdrop.classList.add('closing');
   }
 
   setTimeout(() => {
+    if (sheet) sheet.classList.remove('closing');
+    if (backdrop) backdrop.classList.remove('closing');
     hideModalImmediately();
-  }, 260);
+  }, 280);
 }
 
 function addToPlate(item, ev) {
