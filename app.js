@@ -250,7 +250,7 @@ function closeDish() {
 
   setTimeout(() => {
     hideModalImmediately();
-  }, 220);
+  }, 160);
 }
 
 function addToPlate(item, ev) {
