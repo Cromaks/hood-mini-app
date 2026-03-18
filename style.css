@@ -239,12 +239,13 @@ body{
   position:fixed;
   inset:0;
   z-index:60;
+  background:rgba(0,0,0,.22);
 }
 
 .modal-backdrop{
   position:absolute;
   inset:0;
-  background:rgba(17,17,17,.25);
+  background:transparent;
 }
 
 /* 🔥 аккуратный крестик */
@@ -446,6 +447,8 @@ body{
 .modal-sheet{
   will-change: transform, opacity;
   transform-origin: bottom center;
+  background:var(--bg);
+  opacity:1;
 }
 
 .primary-button{
