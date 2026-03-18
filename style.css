@@ -578,3 +578,45 @@ body{
   background:transparent;
   border:1px solid rgba(17,17,17,.12);
 }
+
+.plate-item{
+  display:grid;
+  grid-template-columns:64px 1fr auto;
+  align-items:center;
+}
+
+.plate-item-image{
+  width:64px;
+  height:64px;
+  border-radius:16px;
+  object-fit:cover;
+  background:#e9e2d6;
+  box-shadow:0 6px 16px rgba(0,0,0,.05);
+}
+
+.plate-item-image-placeholder{
+  background:#ece4d8;
+}
+
+.plate-item-main{
+  min-width:0;
+}
+
+.plate-item-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:12px;
+  margin-bottom:6px;
+}
+
+.plate-item-price{
+  font-size:14px;
+  color:var(--ink);
+  white-space:nowrap;
+}
+
+.plate-remove{
+  align-self:flex-start;
+  margin-top:2px;
+}
