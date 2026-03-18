@@ -546,3 +546,21 @@ body{
 .plate-fly.hidden{
   display:none !important;
 }
+
+.modal.opening{
+  animation: modalFadeIn .16s ease forwards;
+}
+
+.modal.closing{
+  animation: modalFadeOut .16s ease forwards;
+}
+
+@keyframes modalFadeIn{
+  from{ opacity:0; }
+  to{ opacity:1; }
+}
+
+@keyframes modalFadeOut{
+  from{ opacity:1; }
+  to{ opacity:0; }
+}
