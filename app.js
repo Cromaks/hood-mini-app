@@ -40,6 +40,19 @@ function fmt(n) {
   return Math.round(n * 10) / 10;
 }
 
+function showToast(text) {
+  const el = document.createElement('div');
+  el.className = 'toast';
+  el.textContent = text;
+  document.body.appendChild(el);
+
+  setTimeout(() => el.classList.add('show'), 10);
+  setTimeout(() => {
+    el.classList.remove('show');
+    setTimeout(() => el.remove(), 300);
+  }, 1200);
+}
+
 function parsePrice(value) {
   if (!value) return 0;
   const first = String(value).split('/')[0].trim().replace(/[^\d.,]/g, '').replace(',', '.');
@@ -282,6 +295,8 @@ function addToPlate(item, ev) {
   state.plate.push(item);
   renderPlate();
 
+  showToast('Добавлено в тарелку');
+  
   setTimeout(() => {
     animatePlateDrop(item.photo, ev);
   }, 70);
