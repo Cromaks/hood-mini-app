@@ -305,6 +305,13 @@ body{
   letter-spacing:-0.01em;
 }
 
+.detail-price{
+  font-size:20px;
+  font-weight:500;
+  margin-top:6px;
+  margin-bottom:10px;
+}
+
 .detail-description{
   font-size:16px;
   line-height:1.65;
@@ -350,13 +357,13 @@ body{
 }
 
 .detail-kcal{
-  font-size:20px;
-  margin-bottom:8px;
-  color:var(--ink);
+  font-size:14px;
+  color:var(--muted);
+  margin-bottom:4px;
 }
 
 .detail-macros{
-  font-size:15px;
+  font-size:13px;
   color:var(--muted);
   margin-bottom:26px;
   line-height:1.5;
