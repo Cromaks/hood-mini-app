@@ -483,6 +483,11 @@ body{
   text-transform:uppercase;
   padding:0;
   cursor:pointer;
+  opacity:.5;
+}
+
+.plate-remove:hover{
+  opacity:1;
 }
 
 .plate-remove:active{
@@ -546,7 +551,8 @@ body{
 
 .summary-kcal{
   font-family:Georgia,"Times New Roman",serif;
-  font-size:40px;
+  font-size:44px;
+  letter-spacing:-0.01em;
   line-height:1;
   color:var(--ink);
   margin-bottom:10px;
