@@ -270,7 +270,7 @@ body{
 /* ===== ДЕТАЛКА ===== */
 
 .detail-wrap{
-  padding:18px 20px 120px;
+  padding:18px 20px 140px;
 }
 
 .detail-image{
@@ -451,6 +451,8 @@ body{
   left:0;
   right:0;
   bottom:0;
+  display:flex;
+  flex-direction:column;
 
   width:100%;
   max-width:460px;
@@ -552,4 +554,24 @@ body{
 @keyframes modalFadeOut{
   from{ opacity:1; }
   to{ opacity:0; }
+}
+/* ===== FIXED BUTTON В КАРТОЧКЕ ===== */
+
+.detail-footer{
+  position:sticky;
+  bottom:0;
+
+  padding:14px 20px calc(16px + env(safe-area-inset-bottom));
+
+  background:linear-gradient(
+    to top,
+    rgba(246,241,232,1) 70%,
+    rgba(246,241,232,0)
+  );
+
+  backdrop-filter: blur(6px);
+}
+
+.detail-footer .primary-button{
+  width:100%;
 }
