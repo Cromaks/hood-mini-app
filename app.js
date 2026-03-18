@@ -184,7 +184,7 @@ function openDish(item) {
   setTimeout(() => {
     modal.classList.remove('opening');
     if (sheet) sheet.classList.remove('opening');
-  }, 340);
+  }, 320);
 
   const addBtn = document.getElementById('add-to-plate');
   if (addBtn) {
@@ -229,7 +229,7 @@ function closeDish() {
     if (sheet) sheet.classList.remove('closing');
     modal.classList.remove('closing');
     hideModalImmediately();
-  }, 260);
+  }, 200);
 }
 
 function addToPlate(item, ev) {
