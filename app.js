@@ -118,10 +118,11 @@ function renderMenu() {
         card.innerHTML = `
           <img class="food-image" src="images/${item.photo}" alt="${item.name}">
           <div class="food-meta">
-            <div class="food-name">${item.name}</div>
-            ${typeof item.kcal === 'number' ? `<div class="food-kcal">${Math.round(item.kcal)} ккал</div>` : ''}
-            ${hasMacros(item) ? `<div class="food-macros">Б ${fmt(item.p)} · Ж ${fmt(item.f)} · У ${fmt(item.c)}</div>` : ''}
-          </div>
+  <div class="food-name">${item.name}</div>
+  ${item.price ? `<div class="food-price">${item.price} ₽</div>` : ''}
+  ${typeof item.kcal === 'number' ? `<div class="food-kcal">${Math.round(item.kcal)} ккал</div>` : ''}
+  ${hasMacros(item) ? `<div class="food-macros">Б ${fmt(item.p)} · Ж ${fmt(item.f)} · У ${fmt(item.c)}</div>` : ''}
+</div>
         `;
 
         card.onclick = () => openDish(item);
