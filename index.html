@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Café Hood</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="masthead">
+      <img src="images/logo.png" alt="Café Hood" class="brand-logo"/>
+      <div class="brand-subtitle">since 2024</div>
+      <div class="brand-line"></div>
+    </header>
+
+    <main id="view-menu" class="view active">
+      <nav id="category-nav" class="category-nav"></nav>
+      <div id="menu-sections" class="menu-sections"></div>
+    </main>
+
+    <main id="view-plate" class="view">
+      <section class="plate-screen">
+        <h2 class="screen-title">Тарелка</h2>
+        <div id="plate-list" class="plate-list"></div>
+        <div id="plate-empty" class="plate-empty">Добавь блюда из меню, чтобы увидеть суммарные КБЖУ.</div>
+        <div id="plate-summary" class="plate-summary hidden">
+          <div class="summary-label">Итого</div>
+          <div class="summary-kcal" id="summary-kcal">0 ккал</div>
+          <div class="summary-macros" id="summary-macros">Б 0 · Ж 0 · У 0</div>
+          <button id="clear-plate" class="ghost-button">Очистить тарелку</button>
+        </div>
+      </section>
+    </main>
+
+    <nav class="bottom-nav">
+      <button class="nav-btn active" data-view="menu">Меню</button>
+      <button class="nav-btn" data-view="plate">Тарелка <span id="plate-count" class="plate-badge hidden">0</span></button>
+    </nav>
+  </div>
+
+  <div id="dish-modal" class="modal hidden" aria-hidden="true">
+    <div class="modal-backdrop" data-close="true"></div>
+    <div class="modal-sheet">
+      <button class="modal-close" id="modal-close" aria-label="Закрыть">×</button>
+      <div id="modal-content"></div>
+    </div>
+  </div>
+
+  <div id="plate-fly" class="plate-fly hidden"></div>
+
+  <script src="menu-data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
