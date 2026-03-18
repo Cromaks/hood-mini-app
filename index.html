@@ -10,7 +10,7 @@
   <div class="app-shell">
     <header class="masthead">
       <img src="images/logo.png" alt="Café Hood" class="brand-logo"/>
-      <div class="brand-subtitle">since 2024</div>
+      <div class="brand-subtitle">since 2023</div>
       <div class="brand-line"></div>
     </header>
 
@@ -48,6 +48,30 @@
   </div>
 
   <div id="plate-fly" class="plate-fly hidden"></div>
+
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script>
+    (function () {
+      if (window.Telegram && window.Telegram.WebApp) {
+        const tg = window.Telegram.WebApp;
+
+        tg.ready();
+        tg.expand();
+
+        if (typeof tg.disableVerticalSwipes === "function") {
+          tg.disableVerticalSwipes();
+        }
+
+        if (typeof tg.setHeaderColor === "function") {
+          tg.setHeaderColor("#F6F1E8");
+        }
+
+        if (typeof tg.setBackgroundColor === "function") {
+          tg.setBackgroundColor("#F6F1E8");
+        }
+      }
+    })();
+  </script>
 
   <script src="menu-data.js"></script>
   <script src="app.js"></script>
