@@ -335,15 +335,7 @@ function renderPlate() {
           <div class="plate-item-name">${item.name}</div>
           ${item.price ? `<div class="plate-item-price">${item.price} ₽</div>` : ''}
         </div>
-        ${
-          typeof item.kcal === 'number' || hasMacros(item)
-            ? `<div class="plate-item-sub">
-                ${typeof item.kcal === 'number' ? `${Math.round(item.kcal)} ккал` : ''}
-                ${typeof item.kcal === 'number' && hasMacros(item) ? ' · ' : ''}
-                ${hasMacros(item) ? `Б ${fmt(item.p)} · Ж ${fmt(item.f)} · У ${fmt(item.c)}` : ''}
-              </div>`
-            : ''
-        }
+        ${typeof item.kcal === 'number' ? `<div class="plate-item-sub">${Math.round(item.kcal)} ккал</div>` : ''}
       </div>
       <button class="plate-remove" data-index="${index}" type="button">Убрать</button>
     `;
