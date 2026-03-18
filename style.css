@@ -481,11 +481,28 @@ body{
 }
 
 .plate-empty{
+  margin-top:8px;
+  padding:26px 22px;
+  background:rgba(251,248,242,.88);
+  border:1px solid rgba(220,215,207,.72);
+  border-radius:22px;
+  box-shadow:0 8px 22px rgba(0,0,0,.035);
+}
+
+.plate-empty-title{
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:28px;
+  line-height:1.05;
+  color:var(--ink);
+  margin-bottom:10px;
+  letter-spacing:-0.01em;
+}
+
+.plate-empty-text{
   color:var(--muted);
   font-size:15px;
   line-height:1.65;
-  margin-top:10px;
-  max-width:320px;
+  max-width:300px;
 }
 
 .plate-summary{
