@@ -171,25 +171,19 @@ function openDish(item) {
     </div>
   `;
 
-  modal.classList.remove('hidden');
+  modal.classList.remove('hidden', 'closing');
+  modal.classList.add('opening');
   modal.setAttribute('aria-hidden', 'false');
 
   const sheet = modal.querySelector('.modal-sheet');
-  const backdrop = modal.querySelector('.modal-backdrop');
-
   if (sheet) {
     sheet.classList.remove('closing');
     sheet.classList.add('opening');
   }
 
-  if (backdrop) {
-    backdrop.classList.remove('closing');
-    backdrop.classList.add('opening');
-  }
-
   setTimeout(() => {
+    modal.classList.remove('opening');
     if (sheet) sheet.classList.remove('opening');
-    if (backdrop) backdrop.classList.remove('opening');
   }, 340);
 
   const addBtn = document.getElementById('add-to-plate');
@@ -222,21 +216,20 @@ function closeDish() {
   state.modalClosing = true;
 
   const sheet = modal.querySelector('.modal-sheet');
-  const backdrop = modal.querySelector('.modal-backdrop');
+
+  modal.classList.remove('opening');
+  modal.classList.add('closing');
 
   if (sheet) {
+    sheet.classList.remove('opening');
     sheet.classList.add('closing');
-  }
-
-  if (backdrop) {
-    backdrop.classList.add('closing');
   }
 
   setTimeout(() => {
     if (sheet) sheet.classList.remove('closing');
-    if (backdrop) backdrop.classList.remove('closing');
+    modal.classList.remove('closing');
     hideModalImmediately();
-  }, 280);
+  }, 260);
 }
 
 function addToPlate(item, ev) {
