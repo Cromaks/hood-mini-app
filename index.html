@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, viewport-fit=cover" />
   <title>Café Hood</title>
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -23,14 +23,16 @@
       <section class="plate-screen">
         <h2 class="screen-title">Тарелка</h2>
         <div id="plate-list" class="plate-list"></div>
-<div id="plate-empty" class="plate-empty">
-  <div class="plate-empty-title">Тарелка пока пуста</div>
-  <div class="plate-empty-text">Добавь блюда из меню, чтобы увидеть итог по калориям, БЖУ и стоимости.</div>
-</div>
+
+        <div id="plate-empty" class="plate-empty">
+          <div class="plate-empty-title">Тарелка пока пуста</div>
+          <div class="plate-empty-text">Добавь блюда из меню, чтобы увидеть итог по калориям, БЖУ и стоимости.</div>
+        </div>
+
         <div id="plate-summary" class="plate-summary hidden">
           <div class="summary-label">Итого</div>
-          <div class="summary-kcal" id="summary-kcal">0 ккал</div>
-          <div class="summary-macros" id="summary-macros">Б 0 · Ж 0 · У 0</div>
+          <div class="summary-kcal" id="summary-kcal">0 ₽</div>
+          <div class="summary-macros" id="summary-macros">0 ккал · Б 0 · Ж 0 · У 0</div>
           <button id="clear-plate" class="ghost-button">Очистить тарелку</button>
         </div>
       </section>
@@ -42,7 +44,7 @@
     </nav>
   </div>
 
-<div id="dish-modal" class="modal hidden" aria-hidden="true">
+  <div id="dish-modal" class="modal hidden" aria-hidden="true">
     <div class="modal-backdrop" data-close="true"></div>
     <div class="modal-sheet">
       <button class="modal-close" id="modal-close" aria-label="Закрыть">×</button>
@@ -53,26 +55,40 @@
   <div id="plate-fly" class="plate-fly hidden"></div>
 
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script src="https://st.max.ru/js/max-web-app.js"></script>
+
   <script>
     (function () {
-      if (window.Telegram && window.Telegram.WebApp) {
-        const tg = window.Telegram.WebApp;
+      const tgApp = window.Telegram?.WebApp || null;
+      const maxApp = window.WebApp || null;
 
-        tg.ready();
-        tg.expand();
+      if (tgApp) {
+        tgApp.ready();
+        tgApp.expand();
 
-        if (typeof tg.disableVerticalSwipes === "function") {
-          tg.disableVerticalSwipes();
+        if (typeof tgApp.disableVerticalSwipes === "function") {
+          tgApp.disableVerticalSwipes();
         }
 
-        if (typeof tg.setHeaderColor === "function") {
-          tg.setHeaderColor("#F6F1E8");
+        if (typeof tgApp.setHeaderColor === "function") {
+          tgApp.setHeaderColor("#F6F1E8");
         }
 
-        if (typeof tg.setBackgroundColor === "function") {
-          tg.setBackgroundColor("#F6F1E8");
+        if (typeof tgApp.setBackgroundColor === "function") {
+          tgApp.setBackgroundColor("#F6F1E8");
         }
       }
+
+      if (maxApp && typeof maxApp.ready === "function") {
+        maxApp.ready();
+      }
+
+      window.PLATFORM = {
+        isTelegram: !!tgApp,
+        isMax: !!maxApp,
+        tgApp,
+        maxApp
+      };
     })();
   </script>
 
