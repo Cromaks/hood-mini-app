@@ -47,7 +47,7 @@ function showToast(text) {
   const el = document.createElement('div');
   el.className = 'toast';
   el.innerHTML = `
-    <div class="toast-title">Готово</div>
+    <div class="toast-mark">+</div>
     <div class="toast-text">${text}</div>
   `;
 
@@ -59,8 +59,8 @@ function showToast(text) {
 
   setTimeout(() => {
     el.classList.remove('show');
-    setTimeout(() => el.remove(), 260);
-  }, 1350);
+    setTimeout(() => el.remove(), 280);
+  }, 1200);
 }
 
 function parsePrice(value) {
