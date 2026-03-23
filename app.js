@@ -41,16 +41,26 @@ function fmt(n) {
 }
 
 function showToast(text) {
+  const oldToast = document.querySelector('.toast');
+  if (oldToast) oldToast.remove();
+
   const el = document.createElement('div');
   el.className = 'toast';
-  el.textContent = text;
+  el.innerHTML = `
+    <div class="toast-title">Готово</div>
+    <div class="toast-text">${text}</div>
+  `;
+
   document.body.appendChild(el);
 
-  setTimeout(() => el.classList.add('show'), 10);
+  requestAnimationFrame(() => {
+    el.classList.add('show');
+  });
+
   setTimeout(() => {
     el.classList.remove('show');
-    setTimeout(() => el.remove(), 300);
-  }, 1200);
+    setTimeout(() => el.remove(), 260);
+  }, 1350);
 }
 
 function parsePrice(value) {
