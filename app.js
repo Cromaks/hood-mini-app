@@ -296,6 +296,8 @@ function addToPlate(item, ev) {
     ...item,
     plateId: `${Date.now()}-${Math.random().toString(16).slice(2)}`
   });
+  
+  showToast('Добавлено в тарелку');
 
   renderPlate();
 
@@ -305,7 +307,7 @@ function addToPlate(item, ev) {
 
   setTimeout(() => {
     closeDish();
-  }, 40);
+  }, 120);
 }
 
 function renderPlate() {
@@ -358,18 +360,12 @@ function renderPlate() {
     `;
 
     const removeBtn = row.querySelector('.plate-remove');
-    if (removeBtn) {
-      removeBtn.onclick = () => {
-        row.style.transition = 'all .18s ease';
-        row.style.transform = 'scale(.97)';
-        row.style.opacity = '0';
-
-        setTimeout(() => {
-          state.plate = state.plate.filter(x => x.plateId !== item.plateId);
-          renderPlate();
-        }, 180);
-      };
-    }
+if (removeBtn) {
+  removeBtn.onclick = () => {
+    state.plate = state.plate.filter(x => x.plateId !== item.plateId);
+    renderPlate();
+  };
+}
 
     plateList.appendChild(row);
   });
