@@ -382,6 +382,8 @@ function renderPlate() {
     if (removeBtn) {
       removeBtn.onclick = () => removePlateItem(item.plateId, row);
     }
+    
+    attachPlateSwipe(row, item.plateId);
 
     plateList.appendChild(row);
   });
@@ -406,6 +408,66 @@ function removePlateItem(plateId, rowEl) {
   } else {
     updatePlateSummary();
   }
+}
+
+function attachPlateSwipe(rowEl, plateId) {
+  let startX = 0;
+  let currentX = 0;
+  let isDragging = false;
+  let locked = false;
+
+  const threshold = 72;
+  const maxSwipe = 96;
+
+  function onPointerDown(e) {
+    if (locked) return;
+    startX = e.clientX;
+    currentX = 0;
+    isDragging = true;
+    rowEl.classList.add('swiping');
+  }
+
+  function onPointerMove(e) {
+    if (!isDragging || locked) return;
+
+    const deltaX = e.clientX - startX;
+    if (deltaX > 0) return;
+
+    currentX = Math.max(deltaX, -maxSwipe);
+    rowEl.style.transform = `translateX(${currentX}px)`;
+
+    if (Math.abs(currentX) > 36) {
+      rowEl.classList.add('is-swipe-ready');
+    } else {
+      rowEl.classList.remove('is-swipe-ready');
+    }
+  }
+
+  function onPointerUp() {
+    if (!isDragging || locked) return;
+    isDragging = false;
+    rowEl.classList.remove('swiping');
+
+    if (Math.abs(currentX) >= threshold) {
+      locked = true;
+      rowEl.classList.add('plate-item-removing');
+      rowEl.style.transform = '';
+
+      setTimeout(() => {
+        removePlateItem(plateId, rowEl);
+      }, 170);
+      return;
+    }
+
+    rowEl.classList.remove('is-swipe-ready');
+    rowEl.style.transform = '';
+  }
+
+  rowEl.addEventListener('pointerdown', onPointerDown);
+  rowEl.addEventListener('pointermove', onPointerMove);
+  rowEl.addEventListener('pointerup', onPointerUp);
+  rowEl.addEventListener('pointercancel', onPointerUp);
+  rowEl.addEventListener('lostpointercapture', onPointerUp);
 }
 
 function updatePlateSummary() {
