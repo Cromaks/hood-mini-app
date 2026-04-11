@@ -441,7 +441,7 @@ function renderPlate() {
 };
     }
 
-    attachPlateSwipe(row, group.items[group.items.length - 1].plateId);
+    attachPlateSwipe(row, group.items[group.items.length - 1].plateId, group.count > 1);
     plateList.appendChild(row);
   });
 
@@ -449,33 +449,34 @@ function renderPlate() {
 }
 
 function removePlateItem(plateId, rowEl, isGroup = false) {
-  // удаляем только 1 элемент из state
+  const removedItem = state.plate.find(x => x.plateId === plateId);
+  if (!removedItem) return;
+
   state.plate = state.plate.filter(x => x.plateId !== plateId);
 
   updateQuickAddStates();
   updateFoodCountBadges();
 
-  // если это была группа (x2, x3)
   if (isGroup) {
-    const nameEl = rowEl.querySelector('.plate-item-name');
-    const kcalEl = rowEl.querySelector('.plate-item-sub');
-    const priceEl = rowEl.querySelector('.plate-item-price');
+    const remainingCount = state.plate.filter(x => x.name === removedItem.name).length;
 
-    const name = nameEl.textContent.replace(/ ×\d+/, '');
+    if (remainingCount > 0) {
+      const sampleItem = state.plate.find(x => x.name === removedItem.name);
 
-    const count = state.plate.filter(x => x.name === name).length;
+      const nameEl = rowEl?.querySelector('.plate-item-name');
+      const kcalEl = rowEl?.querySelector('.plate-item-sub');
+      const priceEl = rowEl?.querySelector('.plate-item-price');
 
-    if (count > 0) {
-      const item = state.plate.find(x => x.name === name);
+      if (nameEl) {
+        nameEl.textContent = `${sampleItem.name}${remainingCount > 1 ? ` ×${remainingCount}` : ''}`;
+      }
 
-      nameEl.textContent = `${name}${count > 1 ? ` ×${count}` : ''}`;
-
-      if (kcalEl) {
-        kcalEl.textContent = `${Math.round(item.kcal * count)} ккал`;
+      if (kcalEl && typeof sampleItem.kcal === 'number') {
+        kcalEl.textContent = `${Math.round(sampleItem.kcal * remainingCount)} ккал`;
       }
 
       if (priceEl) {
-        priceEl.textContent = `${parsePrice(item.price) * count} ₽`;
+        priceEl.textContent = `${parsePrice(sampleItem.price) * remainingCount} ₽`;
       }
 
       updatePlateSummary();
@@ -483,7 +484,6 @@ function removePlateItem(plateId, rowEl, isGroup = false) {
     }
   }
 
-  // если элемент полностью исчез
   if (rowEl) {
     rowEl.style.transition = 'opacity .18s ease, transform .18s ease';
     rowEl.style.opacity = '0';
@@ -498,7 +498,7 @@ function removePlateItem(plateId, rowEl, isGroup = false) {
   }
 }
 
-function attachPlateSwipe(rowEl, plateId) {
+function attachPlateSwipe(rowEl, plateId, isGroup = false) {
   let startX = 0;
   let currentX = 0;
   let isDragging = false;
@@ -539,11 +539,10 @@ function attachPlateSwipe(rowEl, plateId) {
     if (Math.abs(currentX) >= threshold) {
       locked = true;
       rowEl.classList.add('plate-item-removing');
+      rowEl.classList.remove('is-swipe-ready');
       rowEl.style.transform = '';
 
-      setTimeout(() => {
-        removePlateItem(plateId, rowEl);
-      }, 170);
+      removePlateItem(plateId, rowEl, isGroup);
       return;
     }
 
@@ -569,17 +568,9 @@ function updatePlateSummary() {
     plateCount.classList.add('hidden');
     plateCount.textContent = '0';
 
-    if (summaryLabel) {
-      summaryLabel.textContent = 'Итого';
-    }
-
-    if (summaryKcal) {
-      summaryKcal.textContent = '0 ₽';
-    }
-
-    if (summaryMacros) {
-      summaryMacros.textContent = '0 ккал · Б 0 · Ж 0 · У 0';
-    }
+    if (summaryLabel) summaryLabel.textContent = 'Итого';
+    if (summaryKcal) summaryKcal.textContent = '0 ₽';
+    if (summaryMacros) summaryMacros.textContent = '0 ккал · Б 0 · Ж 0 · У 0';
 
     updatePlatePreview();
     return;
@@ -599,14 +590,8 @@ function updatePlateSummary() {
     return acc;
   }, { kcal: 0, p: 0, f: 0, c: 0, price: 0 });
 
-  if (summaryLabel) {
-    summaryLabel.textContent = 'Итого';
-  }
-
-  if (summaryKcal) {
-    summaryKcal.textContent = `${totals.price} ₽`;
-  }
-
+  if (summaryLabel) summaryLabel.textContent = 'Итого';
+  if (summaryKcal) summaryKcal.textContent = `${totals.price} ₽`;
   if (summaryMacros) {
     summaryMacros.textContent = `${Math.round(totals.kcal)} ккал · Б ${fmt(totals.p)} · Ж ${fmt(totals.f)} · У ${fmt(totals.c)}`;
   }
