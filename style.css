@@ -475,21 +475,30 @@ body{
 
 .plate-remove{
   position:absolute;
-  inset:0;
-  opacity:0;
-  pointer-events:auto;
+  top:10px;
+  right:10px;
+  width:28px;
+  height:28px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
   border:none;
-  background:transparent;
-  color:transparent;
-  font-size:0;
-}
-
-.plate-remove:hover{
-  opacity:1;
+  background:rgba(251,248,242,.9);
+  border-radius:999px;
+  cursor:pointer;
+  z-index:3;
+  box-shadow:0 4px 10px rgba(0,0,0,.05);
 }
 
 .plate-remove:active{
-  opacity:.55;
+  transform:scale(.95);
+}
+
+.plate-remove-icon{
+  font-size:18px;
+  line-height:1;
+  color:var(--muted);
+  pointer-events:none;
 }
 
 .plate-empty{
