@@ -56,6 +56,30 @@ function updateQuickAddStates() {
   });
 }
 
+function updateFoodCountBadges() {
+  document.querySelectorAll('.food-card').forEach(card => {
+    const nameEl = card.querySelector('.food-name');
+    const imageWrap = card.querySelector('.food-image-wrap');
+    if (!nameEl || !imageWrap) return;
+
+    const itemName = nameEl.textContent.trim();
+    const count = state.plate.filter(x => x.name === itemName).length;
+
+    let badge = imageWrap.querySelector('.food-count-badge');
+
+    if (count > 1) {
+      if (!badge) {
+        badge = document.createElement('div');
+        badge.className = 'food-count-badge';
+        imageWrap.appendChild(badge);
+      }
+      badge.textContent = `×${count}`;
+    } else {
+      if (badge) badge.remove();
+    }
+  });
+}
+
 function slug(text) {
   return text
     .toLowerCase()
@@ -195,7 +219,6 @@ function renderMenu() {
         card.innerHTML = `
   <div class="food-image-wrap">
     <img class="food-image" src="images/${item.photo}" alt="${item.name}">
-    ${getPlateCount(item) > 1 ? `<div class="food-count-badge">×${getPlateCount(item)}</div>` : ''}
     <button class="food-quick-add ${isInPlate(item) ? 'is-added' : ''}" type="button" aria-label="Добавить в тарелку">
       ${isInPlate(item) ? '✓' : '+'}
     </button>
@@ -362,7 +385,7 @@ function addToPlate(item, ev) {
   });
 
 updateQuickAddStates();
-renderMenu();
+updateFoodCountBadges();
 renderPlate();
 
   setTimeout(() => {
@@ -377,40 +400,64 @@ renderPlate();
 function renderPlate() {
   plateList.innerHTML = '';
 
+  const grouped = [];
+
   state.plate.forEach((item) => {
+    const existing = grouped.find(x => x.name === item.name);
+    if (existing) {
+      existing.count += 1;
+      existing.items.push(item);
+    } else {
+      grouped.push({
+        ...item,
+        count: 1,
+        items: [item]
+      });
+    }
+  });
+
+  grouped.forEach((group) => {
     const row = document.createElement('div');
     row.className = 'plate-item';
-    row.dataset.plateId = item.plateId;
+    row.dataset.plateId = group.items[0].plateId;
 
     row.innerHTML = `
-      ${item.photo ? `<img class="plate-item-image" src="images/${item.photo}" alt="${item.name}">` : `<div class="plate-item-image plate-item-image-placeholder"></div>`}
+      ${group.photo ? `<img class="plate-item-image" src="images/${group.photo}" alt="${group.name}">` : `<div class="plate-item-image plate-item-image-placeholder"></div>`}
       <div class="plate-item-main">
         <div class="plate-item-top">
-          <div class="plate-item-name">${item.name}</div>
-          ${item.price ? `<div class="plate-item-price">${item.price} ₽</div>` : ''}
+          <div class="plate-item-name">${group.name}${group.count > 1 ? ` ×${group.count}` : ''}</div>
+          ${group.price ? `<div class="plate-item-price">${parsePrice(group.price) * group.count} ₽</div>` : ''}
         </div>
-        ${typeof item.kcal === 'number' ? `<div class="plate-item-sub">${Math.round(item.kcal)} ккал</div>` : ''}
+        ${typeof group.kcal === 'number' ? `<div class="plate-item-sub">${Math.round(group.kcal * group.count)} ккал</div>` : ''}
       </div>
-      <button class="plate-remove" data-id="${item.plateId}" type="button">Убрать</button>
+      <button class="plate-remove" type="button">Убрать</button>
     `;
 
     const removeBtn = row.querySelector('.plate-remove');
     if (removeBtn) {
-      removeBtn.onclick = () => removePlateItem(item.plateId, row);
+      removeBtn.onclick = () => {
+        const firstId = group.items[group.items.length - 1].plateId;
+        removePlateItem(firstId, row, group.count > 1);
+      };
     }
-    
-    attachPlateSwipe(row, item.plateId);
 
+    attachPlateSwipe(row, group.items[group.items.length - 1].plateId);
     plateList.appendChild(row);
   });
 
   updatePlateSummary();
 }
 
-function removePlateItem(plateId, rowEl) {
+function removePlateItem(plateId, rowEl, keepRow = false) {
   state.plate = state.plate.filter(x => x.plateId !== plateId);
 
   updateQuickAddStates();
+  updateFoodCountBadges();
+
+  if (keepRow) {
+    renderPlate();
+    return;
+  }
 
   if (rowEl) {
     rowEl.style.transition = 'opacity .18s ease, transform .18s ease';
@@ -420,9 +467,10 @@ function removePlateItem(plateId, rowEl) {
     setTimeout(() => {
       rowEl.remove();
       updatePlateSummary();
+      renderPlate();
     }, 180);
   } else {
-    updatePlateSummary();
+    renderPlate();
   }
 }
 
@@ -621,7 +669,7 @@ if (clearPlateBtn) {
   clearPlateBtn.onclick = () => {
     state.plate = [];
     updateQuickAddStates();
-    renderMenu();
+    updateFoodCountBadges();
     renderPlate();
   };
 }
@@ -720,6 +768,7 @@ renderCategoryNav();
 renderMenu();
 renderPlate();
 updateQuickAddStates();
+updateFoodCountBadges();
 attachSectionObservers();
 updateActiveCategory();
 requestFoodParallax();
