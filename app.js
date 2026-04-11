@@ -193,13 +193,13 @@ function renderMenu() {
         card.type = 'button';
 
         card.innerHTML = `
-  <<div class="food-image-wrap">
-  <img class="food-image" src="images/${item.photo}" alt="${item.name}">
-  ${getPlateCount(item) > 1 ? `<div class="food-count-badge">×${getPlateCount(item)}</div>` : ''}
-  <button class="food-quick-add ${isInPlate(item) ? 'is-added' : ''}" type="button" aria-label="Добавить в тарелку">
-    ${isInPlate(item) ? '✓' : '+'}
-  </button>
-</div>
+  <div class="food-image-wrap">
+    <img class="food-image" src="images/${item.photo}" alt="${item.name}">
+    ${getPlateCount(item) > 1 ? `<div class="food-count-badge">×${getPlateCount(item)}</div>` : ''}
+    <button class="food-quick-add ${isInPlate(item) ? 'is-added' : ''}" type="button" aria-label="Добавить в тарелку">
+      ${isInPlate(item) ? '✓' : '+'}
+    </button>
+  </div>
   <div class="food-meta">
     <div class="food-name">${item.name}</div>
     ${item.price ? `<div class="food-price">${item.price} ₽</div>` : ''}
@@ -209,14 +209,16 @@ function renderMenu() {
 `;
 
         card.onclick = () => openDish(item);
-        const quickAddBtn = card.querySelector('.food-quick-add');
+
+const quickAddBtn = card.querySelector('.food-quick-add');
 if (quickAddBtn) {
   quickAddBtn.onclick = (e) => {
     e.stopPropagation();
     addToPlate(item, e);
   };
 }
-        grid.appendChild(card);
+
+grid.appendChild(card);
       });
 
       section.appendChild(grid);
