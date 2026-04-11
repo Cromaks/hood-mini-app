@@ -345,7 +345,6 @@ function addToPlate(item, ev) {
     plateId: `${Date.now()}-${Math.random().toString(16).slice(2)}`
   });
 
-  showToast('Добавлено в тарелку');
 updateQuickAddStates();
 renderPlate();
 
