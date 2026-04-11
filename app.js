@@ -40,6 +40,18 @@ function fmt(n) {
   return Math.round(n * 10) / 10;
 }
 
+function parsePrice(value) {
+  if (!value) return 0;
+  const first = String(value)
+    .split('/')[0]
+    .trim()
+    .replace(/[^\d.,]/g, '')
+    .replace(',', '.');
+
+  const num = parseFloat(first);
+  return Number.isFinite(num) ? num : 0;
+}
+
 function showToast(text) {
   const oldToast = document.querySelector('.toast');
   if (oldToast) oldToast.remove();
@@ -58,13 +70,6 @@ function showToast(text) {
     el.classList.remove('show');
     setTimeout(() => el.remove(), 320);
   }, 1100);
-}
-
-function parsePrice(value) {
-  if (!value) return 0;
-  const first = String(value).split('/')[0].trim().replace(/[^\d.,]/g, '').replace(',', '.');
-  const num = parseFloat(first);
-  return Number.isFinite(num) ? num : 0;
 }
 
 function getStickyOffset() {
@@ -145,11 +150,11 @@ function renderMenu() {
         card.innerHTML = `
           <img class="food-image" src="images/${item.photo}" alt="${item.name}">
           <div class="food-meta">
-  <div class="food-name">${item.name}</div>
-  ${item.price ? `<div class="food-price">${item.price} ₽</div>` : ''}
-  ${typeof item.kcal === 'number' ? `<div class="food-kcal">${Math.round(item.kcal)} ккал</div>` : ''}
-  ${hasMacros(item) ? `<div class="food-macros">Б ${fmt(item.p)} · Ж ${fmt(item.f)} · У ${fmt(item.c)}</div>` : ''}
-</div>
+            <div class="food-name">${item.name}</div>
+            ${item.price ? `<div class="food-price">${item.price} ₽</div>` : ''}
+            ${typeof item.kcal === 'number' ? `<div class="food-kcal">${Math.round(item.kcal)} ккал</div>` : ''}
+            ${hasMacros(item) ? `<div class="food-macros">Б ${fmt(item.p)} · Ж ${fmt(item.f)} · У ${fmt(item.c)}</div>` : ''}
+          </div>
         `;
 
         card.onclick = () => openDish(item);
@@ -207,24 +212,16 @@ function openDish(item) {
   modal.setAttribute('aria-hidden', 'false');
 
   const sheet = modal.querySelector('.modal-sheet');
-  const backdrop = modal.querySelector('.modal-backdrop');
-
   if (sheet) {
     sheet.classList.remove('closing');
     sheet.classList.add('opening');
     sheet.scrollTop = 0;
   }
 
-  if (backdrop) {
-    backdrop.classList.remove('closing');
-    backdrop.classList.add('opening');
-  }
-
   setTimeout(() => {
     modal.classList.remove('opening');
     if (sheet) sheet.classList.remove('opening');
-    if (backdrop) backdrop.classList.remove('opening');
-  }, 320);
+  }, 220);
 
   const addBtn = document.getElementById('add-to-plate');
   if (addBtn) {
@@ -239,17 +236,10 @@ function hideModalImmediately() {
   state.modalClosing = false;
 
   const sheet = modal.querySelector('.modal-sheet');
-  const backdrop = modal.querySelector('.modal-backdrop');
-
   if (sheet) {
     sheet.classList.remove('opening', 'closing');
     sheet.style.opacity = '';
     sheet.style.transform = '';
-  }
-
-  if (backdrop) {
-    backdrop.classList.remove('opening', 'closing');
-    backdrop.style.opacity = '';
   }
 }
 
@@ -260,7 +250,6 @@ function closeDish() {
   state.modalClosing = true;
 
   const sheet = modal.querySelector('.modal-sheet');
-  const backdrop = modal.querySelector('.modal-backdrop');
 
   modal.classList.remove('opening');
   modal.classList.add('closing');
@@ -268,11 +257,6 @@ function closeDish() {
   if (sheet) {
     sheet.classList.remove('opening');
     sheet.classList.add('closing');
-  }
-
-  if (backdrop) {
-    backdrop.classList.remove('opening');
-    backdrop.classList.add('closing');
   }
 
   setTimeout(() => {
@@ -303,9 +287,8 @@ function addToPlate(item, ev) {
     ...item,
     plateId: `${Date.now()}-${Math.random().toString(16).slice(2)}`
   });
-  
-  showToast('Добавлено в тарелку');
 
+  showToast('Добавлено в тарелку');
   renderPlate();
 
   setTimeout(() => {
@@ -314,7 +297,7 @@ function addToPlate(item, ev) {
 
   setTimeout(() => {
     closeDish();
-  }, 120);
+  }, 40);
 }
 
 function renderPlate() {
@@ -367,12 +350,12 @@ function renderPlate() {
     `;
 
     const removeBtn = row.querySelector('.plate-remove');
-if (removeBtn) {
-  removeBtn.onclick = () => {
-    state.plate = state.plate.filter(x => x.plateId !== item.plateId);
-    renderPlate();
-  };
-}
+    if (removeBtn) {
+      removeBtn.onclick = () => {
+        state.plate = state.plate.filter(x => x.plateId !== item.plateId);
+        renderPlate();
+      };
+    }
 
     plateList.appendChild(row);
   });
@@ -415,7 +398,6 @@ function animatePlateDrop(photo, ev) {
   if (!targetBtn) return;
 
   const targetRect = targetBtn.getBoundingClientRect();
-
   const endX = targetRect.left + targetRect.width / 2 - 36;
   const endY = targetRect.top - 10;
 
