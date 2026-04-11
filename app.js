@@ -650,12 +650,33 @@ function updateCategoryByScroll() {
   }
 }
 
+function updateFoodParallax() {
+  const images = document.querySelectorAll('.food-image');
+
+  images.forEach((img) => {
+    const rect = img.getBoundingClientRect();
+    const viewportCenter = window.innerHeight / 2;
+    const imageCenter = rect.top + rect.height / 2;
+    const offset = (imageCenter - viewportCenter) * -0.03;
+
+    const limitedOffset = Math.max(Math.min(offset, 10), -10);
+    img.style.transform = `translateY(${limitedOffset}px)`;
+  });
+}
+
 function attachSectionObservers() {
   updateCategoryByScroll();
 }
 
-window.addEventListener('scroll', updateCategoryByScroll, { passive: true });
-window.addEventListener('resize', updateCategoryByScroll);
+window.addEventListener('scroll', () => {
+  updateCategoryByScroll();
+  updateFoodParallax();
+}, { passive: true });
+
+window.addEventListener('resize', () => {
+  updateCategoryByScroll();
+  updateFoodParallax();
+});
 
 if (platePreviewBtn) {
   platePreviewBtn.onclick = () => switchView('plate');
@@ -671,3 +692,4 @@ renderPlate();
 updateQuickAddStates();
 attachSectionObservers();
 updateActiveCategory();
+updateFoodParallax();
