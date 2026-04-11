@@ -331,7 +331,8 @@ function addToPlate(item, ev) {
   });
 
   showToast('Добавлено в тарелку');
-  renderPlate();
+renderMenu();
+renderPlate();
 
   setTimeout(() => {
     animatePlateDrop(item.photo, ev);
@@ -396,9 +397,10 @@ function renderPlate() {
     const removeBtn = row.querySelector('.plate-remove');
     if (removeBtn) {
       removeBtn.onclick = () => {
-        state.plate = state.plate.filter(x => x.plateId !== item.plateId);
-        renderPlate();
-      };
+  state.plate = state.plate.filter(x => x.plateId !== item.plateId);
+  renderMenu();
+  renderPlate();
+};
     }
 
     plateList.appendChild(row);
