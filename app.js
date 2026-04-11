@@ -23,6 +23,7 @@ const plateCount = document.getElementById('plate-count');
 const platePreview = document.getElementById('plate-preview');
 const platePreviewText = document.getElementById('plate-preview-text');
 const platePreviewBtn = document.getElementById('plate-preview-btn');
+const plateEmptyBtn = document.getElementById('plate-empty-btn');
 
 function allFoodCategories() {
   return categories.filter(c => c !== 'Все меню');
@@ -561,6 +562,10 @@ window.addEventListener('resize', updateCategoryByScroll);
 
 if (platePreviewBtn) {
   platePreviewBtn.onclick = () => switchView('plate');
+}
+
+if (plateEmptyBtn) {
+  plateEmptyBtn.onclick = () => switchView('menu');
 }
 
 renderCategoryNav();
