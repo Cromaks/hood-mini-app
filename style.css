@@ -812,6 +812,27 @@ body{
   color:#fff;
 }
 
+.food-count-badge{
+  position:absolute;
+  top:12px;
+  left:12px;
+  min-width:34px;
+  height:28px;
+  padding:0 10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:999px;
+  background:rgba(251,248,242,.92);
+  border:1px solid rgba(220,215,207,.78);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+  box-shadow:0 6px 16px rgba(0,0,0,.05);
+  font-size:12px;
+  color:var(--ink);
+  z-index:2;
+}
+
 .plate-empty-btn{
   margin-top:18px;
   border:none;
@@ -859,24 +880,4 @@ body{
 
 .plate-item.is-swipe-ready::after{
   opacity:1;
-}
-
-.food-count-badge{
-  position:absolute;
-  top:12px;
-  left:12px;
-  min-width:34px;
-  height:28px;
-  padding:0 10px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  border-radius:999px;
-  background:rgba(251,248,242,.92);
-  border:1px solid rgba(220,215,207,.78);
-  backdrop-filter:blur(8px);
-  -webkit-backdrop-filter:blur(8px);
-  box-shadow:0 6px 16px rgba(0,0,0,.05);
-  font-size:12px;
-  color:var(--ink);
 }
