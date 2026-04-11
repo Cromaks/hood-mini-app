@@ -712,7 +712,7 @@ body{
 .plate-preview{
   position:fixed;
   left:50%;
-  transform:translateX(-50%);
+  transform:translateX(-50%) translateY(10px);
   bottom:84px;
   width:min(392px, calc(100% - 32px));
   display:flex;
@@ -727,6 +727,19 @@ body{
   backdrop-filter:blur(12px);
   -webkit-backdrop-filter:blur(12px);
   z-index:45;
+
+  opacity:0;
+  pointer-events:none;
+
+  transition:
+    opacity .24s ease,
+    transform .24s cubic-bezier(.22,.8,.24,1);
+}
+
+.plate-preview.is-visible{
+  opacity:1;
+  pointer-events:auto;
+  transform:translateX(-50%) translateY(0);
 }
 
 .plate-preview-text{
