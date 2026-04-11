@@ -801,3 +801,41 @@ body{
   font-size:14px;
   cursor:pointer;
 }
+
+.plate-item{
+  touch-action: pan-y;
+  will-change: transform;
+  transition: transform .18s ease, opacity .18s ease;
+}
+
+.plate-item.swiping{
+  transition: none;
+}
+
+.plate-item-removing{
+  opacity: 0;
+  transform: translateX(-84px) scale(.985);
+}
+
+.plate-item::after{
+  content:'Убрать';
+  position:absolute;
+  top:0;
+  right:0;
+  bottom:0;
+  width:92px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:11px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:#8b5e5e;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .18s ease;
+}
+
+.plate-item.is-swipe-ready::after{
+  opacity:1;
+}
