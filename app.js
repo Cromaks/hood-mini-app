@@ -37,6 +37,20 @@ function isInPlate(item) {
   return state.plate.some(x => x.name === item.name);
 }
 
+function updateQuickAddStates() {
+  document.querySelectorAll('.food-card').forEach(card => {
+    const nameEl = card.querySelector('.food-name');
+    const quickAddBtn = card.querySelector('.food-quick-add');
+    if (!nameEl || !quickAddBtn) return;
+
+    const itemName = nameEl.textContent.trim();
+    const added = state.plate.some(x => x.name === itemName);
+
+    quickAddBtn.classList.toggle('is-added', added);
+    quickAddBtn.textContent = added ? '✓' : '+';
+  });
+}
+
 function slug(text) {
   return text
     .toLowerCase()
@@ -332,7 +346,7 @@ function addToPlate(item, ev) {
   });
 
   showToast('Добавлено в тарелку');
-renderMenu();
+updateQuickAddStates();
 renderPlate();
 
   setTimeout(() => {
@@ -399,7 +413,7 @@ function renderPlate() {
     if (removeBtn) {
       removeBtn.onclick = () => {
   state.plate = state.plate.filter(x => x.plateId !== item.plateId);
-  renderMenu();
+  updateQuickAddStates();
   renderPlate();
 };
     }
@@ -506,6 +520,7 @@ const clearPlateBtn = document.getElementById('clear-plate');
 if (clearPlateBtn) {
   clearPlateBtn.onclick = () => {
     state.plate = [];
+    updateQuickAddStates();
     renderPlate();
   };
 }
@@ -571,5 +586,6 @@ if (plateEmptyBtn) {
 renderCategoryNav();
 renderMenu();
 renderPlate();
+updateQuickAddStates();
 attachSectionObservers();
 updateActiveCategory();
