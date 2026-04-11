@@ -362,6 +362,7 @@ function addToPlate(item, ev) {
   });
 
 updateQuickAddStates();
+renderMenu();
 renderPlate();
 
   setTimeout(() => {
@@ -620,6 +621,7 @@ if (clearPlateBtn) {
   clearPlateBtn.onclick = () => {
     state.plate = [];
     updateQuickAddStates();
+    renderMenu();
     renderPlate();
   };
 }
