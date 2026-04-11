@@ -384,9 +384,7 @@ function addToPlate(item, ev) {
     plateId: `${Date.now()}-${Math.random().toString(16).slice(2)}`
   });
 
-updateQuickAddStates();
-updateFoodCountBadges();
-renderPlate();
+syncPlateUI();
 
   setTimeout(() => {
     animatePlateDrop(item.photo, ev);
@@ -419,7 +417,7 @@ function renderPlate() {
   grouped.forEach((group) => {
     const row = document.createElement('div');
     row.className = 'plate-item';
-    row.dataset.plateId = group.items[0].plateId;
+    row.dataset.name = group.name;
 
     row.innerHTML = `
       ${group.photo ? `<img class="plate-item-image" src="images/${group.photo}" alt="${group.name}">` : `<div class="plate-item-image plate-item-image-placeholder"></div>`}
@@ -436,16 +434,70 @@ function renderPlate() {
     const removeBtn = row.querySelector('.plate-remove');
     if (removeBtn) {
       removeBtn.onclick = () => {
-  const lastItem = group.items[group.items.length - 1];
-  removePlateItem(lastItem.plateId, row, group.count > 1);
-};
+        removeOnePlateItemByName(group.name);
+      };
     }
 
-    attachPlateSwipe(row, group.items[group.items.length - 1].plateId, group.count > 1);
+    attachPlateSwipe(row, group.name);
     plateList.appendChild(row);
   });
+}
 
+function updatePlateSummary() {
+  const summaryLabel = document.querySelector('.summary-label');
+  const summaryKcal = document.getElementById('summary-kcal');
+  const summaryMacros = document.getElementById('summary-macros');
+
+  if (!state.plate.length) {
+    plateEmpty.classList.remove('hidden');
+    plateSummary.classList.add('hidden');
+    plateCount.classList.add('hidden');
+    plateCount.textContent = '0';
+
+    if (summaryLabel) summaryLabel.textContent = 'Итого';
+    if (summaryKcal) summaryKcal.textContent = '0 ₽';
+    if (summaryMacros) summaryMacros.textContent = '0 ккал · Б 0 · Ж 0 · У 0';
+
+    updatePlatePreview();
+    return;
+  }
+
+  plateEmpty.classList.add('hidden');
+  plateSummary.classList.remove('hidden');
+  plateCount.classList.remove('hidden');
+  plateCount.textContent = state.plate.length;
+
+  const totals = state.plate.reduce((acc, item) => {
+    acc.kcal += item.kcal || 0;
+    acc.p += item.p || 0;
+    acc.f += item.f || 0;
+    acc.c += item.c || 0;
+    acc.price += parsePrice(item.price);
+    return acc;
+  }, { kcal: 0, p: 0, f: 0, c: 0, price: 0 });
+
+  if (summaryLabel) summaryLabel.textContent = 'Итого';
+  if (summaryKcal) summaryKcal.textContent = `${totals.price} ₽`;
+  if (summaryMacros) {
+    summaryMacros.textContent = `${Math.round(totals.kcal)} ккал · Б ${fmt(totals.p)} · Ж ${fmt(totals.f)} · У ${fmt(totals.c)}`;
+  }
+
+  updatePlatePreview();
+}
+
+function syncPlateUI() {
+  updateQuickAddStates();
+  updateFoodCountBadges();
+  renderPlate();
   updatePlateSummary();
+}
+
+function removeOnePlateItemByName(name) {
+  const index = state.plate.map(x => x.name).lastIndexOf(name);
+  if (index === -1) return;
+
+  state.plate.splice(index, 1);
+  syncPlateUI();
 }
 
 function removePlateItem(plateId, rowEl, isGroup = false) {
@@ -498,7 +550,7 @@ function removePlateItem(plateId, rowEl, isGroup = false) {
   }
 }
 
-function attachPlateSwipe(rowEl, plateId, isGroup = false) {
+function attachPlateSwipe(rowEl, itemName) {
   let startX = 0;
   let currentX = 0;
   let isDragging = false;
@@ -542,7 +594,10 @@ function attachPlateSwipe(rowEl, plateId, isGroup = false) {
       rowEl.classList.remove('is-swipe-ready');
       rowEl.style.transform = '';
 
-      removePlateItem(plateId, rowEl, isGroup);
+      setTimeout(() => {
+        removeOnePlateItemByName(itemName);
+      }, 170);
+
       return;
     }
 
@@ -677,9 +732,7 @@ const clearPlateBtn = document.getElementById('clear-plate');
 if (clearPlateBtn) {
   clearPlateBtn.onclick = () => {
     state.plate = [];
-    updateQuickAddStates();
-    updateFoodCountBadges();
-    renderPlate();
+    syncPlateUI();
   };
 }
 
@@ -775,9 +828,7 @@ if (plateEmptyBtn) {
 
 renderCategoryNav();
 renderMenu();
-renderPlate();
-updateQuickAddStates();
-updateFoodCountBadges();
+syncPlateUI();
 attachSectionObservers();
 updateActiveCategory();
 requestFoodParallax();
