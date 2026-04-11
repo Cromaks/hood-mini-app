@@ -496,16 +496,18 @@ function removeOnePlateItemByName(name, rowEl = null) {
   const index = state.plate.map(x => x.name).lastIndexOf(name);
   if (index === -1) return;
 
+  // 1) удаляем 1 элемент из состояния
   state.plate.splice(index, 1);
 
+  // 2) обновляем состояния в меню
   updateQuickAddStates();
   updateFoodCountBadges();
-  updatePlateSummary();
 
+  // 3) проверяем, сколько таких блюд осталось
   const remaining = state.plate.filter(x => x.name === name);
 
-  // если такие блюда ещё остались — просто обновляем текущую строку
-  if (remaining.length && rowEl) {
+  // если такое блюдо ещё есть — просто обновляем текущую строку
+  if (remaining.length > 0 && rowEl) {
     const sample = remaining[0];
 
     const nameEl = rowEl.querySelector('.plate-item-name');
@@ -517,21 +519,25 @@ function removeOnePlateItemByName(name, rowEl = null) {
     }
 
     if (kcalEl) {
-      kcalEl.textContent = typeof sample.kcal === 'number'
-        ? `${Math.round(sample.kcal * remaining.length)} ккал`
-        : '';
+      kcalEl.textContent =
+        typeof sample.kcal === 'number'
+          ? `${Math.round(sample.kcal * remaining.length)} ккал`
+          : '';
     }
 
     if (priceEl) {
-      priceEl.textContent = sample.price
-        ? `${parsePrice(sample.price) * remaining.length} ₽`
-        : '';
+      priceEl.textContent =
+        sample.price
+          ? `${parsePrice(sample.price) * remaining.length} ₽`
+          : '';
     }
 
+    // очень важно: итог пересчитываем сразу после изменения state
+    updatePlateSummary();
     return;
   }
 
-  // если таких блюд больше нет — удаляем строку из DOM
+  // если такого блюда больше нет — удаляем строку
   if (rowEl) {
     rowEl.style.transition = 'opacity .18s ease, transform .18s ease';
     rowEl.style.opacity = '0';
@@ -540,13 +546,24 @@ function removeOnePlateItemByName(name, rowEl = null) {
     setTimeout(() => {
       rowEl.remove();
 
-      // если тарелка стала пустой, чистим список и показываем пустое состояние
+      // если тарелка уже пустая — принудительно чистим DOM списка
       if (!state.plate.length) {
         plateList.innerHTML = '';
-        updatePlateSummary();
       }
+
+      // и ещё раз финально синхронизируем итог
+      updatePlateSummary();
     }, 180);
+
+    return;
   }
+
+  // запасной вариант
+  if (!state.plate.length) {
+    plateList.innerHTML = '';
+  }
+
+  updatePlateSummary();
 }
 
 function removePlateItem(plateId, rowEl, isGroup = false) {
