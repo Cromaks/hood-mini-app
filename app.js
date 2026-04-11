@@ -20,6 +20,9 @@ const plateList = document.getElementById('plate-list');
 const plateEmpty = document.getElementById('plate-empty');
 const plateSummary = document.getElementById('plate-summary');
 const plateCount = document.getElementById('plate-count');
+const platePreview = document.getElementById('plate-preview');
+const platePreviewText = document.getElementById('plate-preview-text');
+const platePreviewBtn = document.getElementById('plate-preview-btn');
 
 function allFoodCategories() {
   return categories.filter(c => c !== 'Все меню');
