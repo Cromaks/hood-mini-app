@@ -77,7 +77,7 @@ function parsePrice(value) {
 function updatePlatePreview() {
   if (!platePreview || !platePreviewText) return;
 
-  if (!state.plate.length) {
+  if (!state.plate.length || state.currentView === 'plate') {
     platePreview.classList.remove('is-visible');
     return;
   }
@@ -576,6 +576,8 @@ function switchView(view) {
   document.querySelectorAll('.nav-btn').forEach(b => {
     b.classList.toggle('active', b.dataset.view === view);
   });
+
+  updatePlatePreview();
 }
 
 function updateActiveCategory() {
