@@ -2,7 +2,8 @@ const state = {
   currentView: 'menu',
   plate: [],
   currentCategory: 'Все меню',
-  modalClosing: false
+  modalClosing: false,
+  menuScrollY: 0
 };
 
 const categories = window.MENU_DATA.categories;
@@ -35,6 +36,10 @@ function hasMacros(item) {
 
 function isInPlate(item) {
   return state.plate.some(x => x.name === item.name);
+}
+
+function getPlateCount(item) {
+  return state.plate.filter(x => x.name === item.name).length;
 }
 
 function updateQuickAddStates() {
@@ -244,6 +249,7 @@ if (quickAddBtn) {
 
 function openDish(item) {
   state.modalClosing = false;
+  state.menuScrollY = window.scrollY;
 
  modalContent.innerHTML = `
   <div class="detail-card">
@@ -317,8 +323,15 @@ function closeDish() {
   }
 
   setTimeout(() => {
-    hideModalImmediately();
-  }, 160);
+  hideModalImmediately();
+
+  if (state.currentView === 'menu') {
+    window.scrollTo({
+      top: state.menuScrollY,
+      behavior: 'instant'
+    });
+  }
+}, 160);
 }
 
 function addToPlate(item, ev) {
