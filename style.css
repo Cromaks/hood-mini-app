@@ -746,3 +746,20 @@ body{
   font-size:13px;
   cursor:pointer;
 }
+
+.detail-card{
+  display:flex;
+  flex-direction:column;
+  min-height:100%;
+}
+
+.detail-wrap{
+  padding:0 0 110px;
+}
+
+.detail-footer{
+  position:sticky;
+  bottom:0;
+  padding:14px 0 calc(6px + env(safe-area-inset-bottom));
+  background:linear-gradient(to top, rgba(246,241,232,1) 72%, rgba(246,241,232,0));
+}
