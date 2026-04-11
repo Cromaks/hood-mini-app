@@ -436,9 +436,9 @@ function renderPlate() {
     const removeBtn = row.querySelector('.plate-remove');
     if (removeBtn) {
       removeBtn.onclick = () => {
-        const firstId = group.items[group.items.length - 1].plateId;
-        removePlateItem(firstId, row, group.count > 1);
-      };
+  const lastItem = group.items[group.items.length - 1];
+  removePlateItem(lastItem.plateId, row, group.count > 1);
+};
     }
 
     attachPlateSwipe(row, group.items[group.items.length - 1].plateId);
@@ -448,17 +448,42 @@ function renderPlate() {
   updatePlateSummary();
 }
 
-function removePlateItem(plateId, rowEl, keepRow = false) {
+function removePlateItem(plateId, rowEl, isGroup = false) {
+  // удаляем только 1 элемент из state
   state.plate = state.plate.filter(x => x.plateId !== plateId);
 
   updateQuickAddStates();
   updateFoodCountBadges();
 
-  if (keepRow) {
-    renderPlate();
-    return;
+  // если это была группа (x2, x3)
+  if (isGroup) {
+    const nameEl = rowEl.querySelector('.plate-item-name');
+    const kcalEl = rowEl.querySelector('.plate-item-sub');
+    const priceEl = rowEl.querySelector('.plate-item-price');
+
+    const name = nameEl.textContent.replace(/ ×\d+/, '');
+
+    const count = state.plate.filter(x => x.name === name).length;
+
+    if (count > 0) {
+      const item = state.plate.find(x => x.name === name);
+
+      nameEl.textContent = `${name}${count > 1 ? ` ×${count}` : ''}`;
+
+      if (kcalEl) {
+        kcalEl.textContent = `${Math.round(item.kcal * count)} ккал`;
+      }
+
+      if (priceEl) {
+        priceEl.textContent = `${parsePrice(item.price) * count} ₽`;
+      }
+
+      updatePlateSummary();
+      return;
+    }
   }
 
+  // если элемент полностью исчез
   if (rowEl) {
     rowEl.style.transition = 'opacity .18s ease, transform .18s ease';
     rowEl.style.opacity = '0';
@@ -467,10 +492,9 @@ function removePlateItem(plateId, rowEl, keepRow = false) {
     setTimeout(() => {
       rowEl.remove();
       updatePlateSummary();
-      renderPlate();
     }, 180);
   } else {
-    renderPlate();
+    updatePlateSummary();
   }
 }
 
