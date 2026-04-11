@@ -432,11 +432,11 @@ function renderPlate() {
     `;
 
     const removeBtn = row.querySelector('.plate-remove');
-    if (removeBtn) {
-      removeBtn.onclick = () => {
-  removeOnePlateItemByName(group.name, row);
-};
-    }
+if (removeBtn) {
+  removeBtn.onclick = () => {
+    removeOnePlateItemByName(group.name, row);
+  };
+}
 
     attachPlateSwipe(row, group.name, row);
     plateList.appendChild(row);
@@ -496,17 +496,13 @@ function removeOnePlateItemByName(name, rowEl = null) {
   const index = state.plate.map(x => x.name).lastIndexOf(name);
   if (index === -1) return;
 
-  // 1) удаляем 1 элемент из состояния
   state.plate.splice(index, 1);
 
-  // 2) обновляем состояния в меню
   updateQuickAddStates();
   updateFoodCountBadges();
 
-  // 3) проверяем, сколько таких блюд осталось
   const remaining = state.plate.filter(x => x.name === name);
 
-  // если такое блюдо ещё есть — просто обновляем текущую строку
   if (remaining.length > 0 && rowEl) {
     const sample = remaining[0];
 
@@ -532,12 +528,10 @@ function removeOnePlateItemByName(name, rowEl = null) {
           : '';
     }
 
-    // очень важно: итог пересчитываем сразу после изменения state
     updatePlateSummary();
     return;
   }
 
-  // если такого блюда больше нет — удаляем строку
   if (rowEl) {
     rowEl.style.transition = 'opacity .18s ease, transform .18s ease';
     rowEl.style.opacity = '0';
@@ -546,24 +540,54 @@ function removeOnePlateItemByName(name, rowEl = null) {
     setTimeout(() => {
       rowEl.remove();
 
-      // если тарелка уже пустая — принудительно чистим DOM списка
       if (!state.plate.length) {
         plateList.innerHTML = '';
       }
 
-      // и ещё раз финально синхронизируем итог
       updatePlateSummary();
     }, 180);
 
     return;
   }
 
-  // запасной вариант
   if (!state.plate.length) {
     plateList.innerHTML = '';
   }
 
   updatePlateSummary();
+}
+
+function removePlateGroupByName(name, rowEl = null) {
+  const hasItems = state.plate.some(x => x.name === name);
+  if (!hasItems) return;
+
+  state.plate = state.plate.filter(x => x.name !== name);
+
+  updateQuickAddStates();
+  updateFoodCountBadges();
+  updatePlateSummary();
+
+  if (rowEl) {
+    rowEl.style.transition = 'opacity .18s ease, transform .18s ease';
+    rowEl.style.opacity = '0';
+    rowEl.style.transform = 'scale(.98)';
+
+    setTimeout(() => {
+      rowEl.remove();
+
+      if (!state.plate.length) {
+        plateList.innerHTML = '';
+      }
+
+      updatePlateSummary();
+    }, 180);
+  } else {
+    if (!state.plate.length) {
+      plateList.innerHTML = '';
+    }
+
+    updatePlateSummary();
+  }
 }
 
 function removePlateItem(plateId, rowEl, isGroup = false) {
@@ -660,7 +684,7 @@ function attachPlateSwipe(rowEl, itemName) {
       rowEl.classList.remove('is-swipe-ready');
       rowEl.style.transform = '';
 
-      removeOnePlateItemByName(itemName, rowEl);
+      removePlateGroupByName(itemName, rowEl);
       return;
     }
 
