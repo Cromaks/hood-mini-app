@@ -428,7 +428,9 @@ function renderPlate() {
         </div>
         ${typeof group.kcal === 'number' ? `<div class="plate-item-sub">${Math.round(group.kcal * group.count)} ккал</div>` : ''}
       </div>
-      <button class="plate-remove" type="button" aria-label="Убрать одну позицию">×</button>
+      <button class="plate-remove" type="button" aria-label="Убрать одну позицию">
+  <span class="plate-remove-icon">×</span>
+</button>
     `;
 
     const removeBtn = row.querySelector('.plate-remove');
