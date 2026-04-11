@@ -434,11 +434,11 @@ function renderPlate() {
     const removeBtn = row.querySelector('.plate-remove');
     if (removeBtn) {
       removeBtn.onclick = () => {
-        removeOnePlateItemByName(group.name);
-      };
+  removeOnePlateItemByName(group.name, row);
+};
     }
 
-    attachPlateSwipe(row, group.name);
+    attachPlateSwipe(row, group.name, row);
     plateList.appendChild(row);
   });
 }
@@ -492,12 +492,61 @@ function syncPlateUI() {
   updatePlateSummary();
 }
 
-function removeOnePlateItemByName(name) {
+function removeOnePlateItemByName(name, rowEl = null) {
   const index = state.plate.map(x => x.name).lastIndexOf(name);
   if (index === -1) return;
 
   state.plate.splice(index, 1);
-  syncPlateUI();
+
+  updateQuickAddStates();
+  updateFoodCountBadges();
+  updatePlateSummary();
+
+  const remaining = state.plate.filter(x => x.name === name);
+
+  // если такие блюда ещё остались — просто обновляем текущую строку
+  if (remaining.length && rowEl) {
+    const sample = remaining[0];
+
+    const nameEl = rowEl.querySelector('.plate-item-name');
+    const kcalEl = rowEl.querySelector('.plate-item-sub');
+    const priceEl = rowEl.querySelector('.plate-item-price');
+
+    if (nameEl) {
+      nameEl.textContent = `${name}${remaining.length > 1 ? ` ×${remaining.length}` : ''}`;
+    }
+
+    if (kcalEl) {
+      kcalEl.textContent = typeof sample.kcal === 'number'
+        ? `${Math.round(sample.kcal * remaining.length)} ккал`
+        : '';
+    }
+
+    if (priceEl) {
+      priceEl.textContent = sample.price
+        ? `${parsePrice(sample.price) * remaining.length} ₽`
+        : '';
+    }
+
+    return;
+  }
+
+  // если таких блюд больше нет — удаляем строку из DOM
+  if (rowEl) {
+    rowEl.style.transition = 'opacity .18s ease, transform .18s ease';
+    rowEl.style.opacity = '0';
+    rowEl.style.transform = 'scale(.98)';
+
+    setTimeout(() => {
+      rowEl.remove();
+
+      // если тарелка стала пустой, чистим список и показываем пустое состояние
+      if (!state.plate.length) {
+        plateList.innerHTML = '';
+        updatePlateSummary();
+      }
+    }, 180);
+  }
 }
 
 function removePlateItem(plateId, rowEl, isGroup = false) {
@@ -594,10 +643,7 @@ function attachPlateSwipe(rowEl, itemName) {
       rowEl.classList.remove('is-swipe-ready');
       rowEl.style.transform = '';
 
-      setTimeout(() => {
-        removeOnePlateItemByName(itemName);
-      }, 170);
-
+      removeOnePlateItemByName(itemName, rowEl);
       return;
     }
 
