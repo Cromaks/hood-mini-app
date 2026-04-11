@@ -78,18 +78,18 @@ function updatePlatePreview() {
   if (!platePreview || !platePreviewText) return;
 
   if (!state.plate.length) {
-    platePreview.classList.add('hidden');
+    platePreview.classList.remove('is-visible');
     return;
   }
 
   const totals = state.plate.reduce((acc, item) => {
-    acc.kcal += item.kcal || 0;
     acc.price += parsePrice(item.price);
     return acc;
-  }, { kcal: 0, price: 0 });
+  }, { price: 0 });
 
-  platePreviewText.textContent = `${state.plate.length} ${state.plate.length === 1 ? 'блюдо' : state.plate.length < 5 ? 'блюда' : 'блюд'} · ${Math.round(totals.kcal)} ккал · ${totals.price} ₽`;
-  platePreview.classList.remove('hidden');
+  platePreviewText.textContent = `${state.plate.length} ${state.plate.length === 1 ? 'блюдо' : state.plate.length < 5 ? 'блюда' : 'блюд'} · ${totals.price} ₽`;
+
+  platePreview.classList.add('is-visible');
 }
 
 function showToast(text) {
