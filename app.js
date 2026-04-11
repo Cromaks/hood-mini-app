@@ -59,6 +59,24 @@ function parsePrice(value) {
   return Number.isFinite(num) ? num : 0;
 }
 
+function updatePlatePreview() {
+  if (!platePreview || !platePreviewText) return;
+
+  if (!state.plate.length) {
+    platePreview.classList.add('hidden');
+    return;
+  }
+
+  const totals = state.plate.reduce((acc, item) => {
+    acc.kcal += item.kcal || 0;
+    acc.price += parsePrice(item.price);
+    return acc;
+  }, { kcal: 0, price: 0 });
+
+  platePreviewText.textContent = `${state.plate.length} ${state.plate.length === 1 ? 'блюдо' : state.plate.length < 5 ? 'блюда' : 'блюд'} · ${Math.round(totals.kcal)} ккал · ${totals.price} ₽`;
+  platePreview.classList.remove('hidden');
+}
+
 function showToast(text) {
   const oldToast = document.querySelector('.toast');
   if (oldToast) oldToast.remove();
@@ -343,6 +361,8 @@ function renderPlate() {
     if (summaryMacros) {
       summaryMacros.textContent = '0 ккал · Б 0 · Ж 0 · У 0';
     }
+    
+    updatePlatePreview();
 
     return;
   }
@@ -399,6 +419,7 @@ function renderPlate() {
   if (summaryMacros) {
     summaryMacros.textContent = `${Math.round(totals.kcal)} ккал · Б ${fmt(totals.p)} · Ж ${fmt(totals.f)} · У ${fmt(totals.c)}`;
   }
+  updatePlatePreview();
 }
 
 function animatePlateDrop(photo, ev) {
@@ -530,6 +551,10 @@ function attachSectionObservers() {
 
 window.addEventListener('scroll', updateCategoryByScroll, { passive: true });
 window.addEventListener('resize', updateCategoryByScroll);
+
+if (platePreviewBtn) {
+  platePreviewBtn.onclick = () => switchView('plate');
+}
 
 renderCategoryNav();
 renderMenu();
