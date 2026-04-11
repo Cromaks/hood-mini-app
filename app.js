@@ -29,6 +29,10 @@ function hasMacros(item) {
   return [item.kcal, item.p, item.f, item.c].every(v => typeof v === 'number');
 }
 
+function isInPlate(item) {
+  return state.plate.some(x => x.name === item.name);
+}
+
 function slug(text) {
   return text
     .toLowerCase()
@@ -148,16 +152,28 @@ function renderMenu() {
         card.type = 'button';
 
         card.innerHTML = `
-          <img class="food-image" src="images/${item.photo}" alt="${item.name}">
-          <div class="food-meta">
-            <div class="food-name">${item.name}</div>
-            ${item.price ? `<div class="food-price">${item.price} ₽</div>` : ''}
-            ${typeof item.kcal === 'number' ? `<div class="food-kcal">${Math.round(item.kcal)} ккал</div>` : ''}
-            ${hasMacros(item) ? `<div class="food-macros">Б ${fmt(item.p)} · Ж ${fmt(item.f)} · У ${fmt(item.c)}</div>` : ''}
-          </div>
-        `;
+  <div class="food-image-wrap">
+    <img class="food-image" src="images/${item.photo}" alt="${item.name}">
+    <button class="food-quick-add ${isInPlate(item) ? 'is-added' : ''}" type="button" aria-label="Добавить в тарелку">
+      ${isInPlate(item) ? '✓' : '+'}
+    </button>
+  </div>
+  <div class="food-meta">
+    <div class="food-name">${item.name}</div>
+    ${item.price ? `<div class="food-price">${item.price} ₽</div>` : ''}
+    ${typeof item.kcal === 'number' ? `<div class="food-kcal">${Math.round(item.kcal)} ккал</div>` : ''}
+    ${hasMacros(item) ? `<div class="food-macros">Б ${fmt(item.p)} · Ж ${fmt(item.f)} · У ${fmt(item.c)}</div>` : ''}
+  </div>
+`;
 
         card.onclick = () => openDish(item);
+        const quickAddBtn = card.querySelector('.food-quick-add');
+if (quickAddBtn) {
+  quickAddBtn.onclick = (e) => {
+    e.stopPropagation();
+    addToPlate(item, e);
+  };
+}
         grid.appendChild(card);
       });
 
