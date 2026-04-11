@@ -711,8 +711,27 @@ body{
 }
 
 .plate-remove{
-  align-self:flex-start;
-  margin-top:2px;
+  position:absolute;
+  top:14px;
+  right:14px;
+  width:28px;
+  height:28px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:none;
+  background:rgba(251,248,242,.92);
+  color:var(--muted);
+  border-radius:999px;
+  font-size:18px;
+  line-height:1;
+  cursor:pointer;
+  box-shadow:0 4px 10px rgba(0,0,0,.04);
+  z-index:3;
+}
+
+.plate-remove:active{
+  transform:scale(.96);
 }
 
 .plate-preview{
@@ -860,7 +879,7 @@ body{
 }
 
 .plate-item::after{
-  content:'Убрать';
+  content:'Удалить всё';
   position:absolute;
   top:0;
   right:0;
