@@ -361,6 +361,54 @@ renderPlate();
 function renderPlate() {
   plateList.innerHTML = '';
 
+  state.plate.forEach((item) => {
+    const row = document.createElement('div');
+    row.className = 'plate-item';
+    row.dataset.plateId = item.plateId;
+
+    row.innerHTML = `
+      ${item.photo ? `<img class="plate-item-image" src="images/${item.photo}" alt="${item.name}">` : `<div class="plate-item-image plate-item-image-placeholder"></div>`}
+      <div class="plate-item-main">
+        <div class="plate-item-top">
+          <div class="plate-item-name">${item.name}</div>
+          ${item.price ? `<div class="plate-item-price">${item.price} ₽</div>` : ''}
+        </div>
+        ${typeof item.kcal === 'number' ? `<div class="plate-item-sub">${Math.round(item.kcal)} ккал</div>` : ''}
+      </div>
+      <button class="plate-remove" data-id="${item.plateId}" type="button">Убрать</button>
+    `;
+
+    const removeBtn = row.querySelector('.plate-remove');
+    if (removeBtn) {
+      removeBtn.onclick = () => removePlateItem(item.plateId, row);
+    }
+
+    plateList.appendChild(row);
+  });
+
+  updatePlateSummary();
+}
+
+function removePlateItem(plateId, rowEl) {
+  state.plate = state.plate.filter(x => x.plateId !== plateId);
+
+  updateQuickAddStates();
+
+  if (rowEl) {
+    rowEl.style.transition = 'opacity .18s ease, transform .18s ease';
+    rowEl.style.opacity = '0';
+    rowEl.style.transform = 'scale(.98)';
+
+    setTimeout(() => {
+      rowEl.remove();
+      updatePlateSummary();
+    }, 180);
+  } else {
+    updatePlateSummary();
+  }
+}
+
+function updatePlateSummary() {
   const summaryLabel = document.querySelector('.summary-label');
   const summaryKcal = document.getElementById('summary-kcal');
   const summaryMacros = document.getElementById('summary-macros');
@@ -382,9 +430,8 @@ function renderPlate() {
     if (summaryMacros) {
       summaryMacros.textContent = '0 ккал · Б 0 · Ж 0 · У 0';
     }
-    
-    updatePlatePreview();
 
+    updatePlatePreview();
     return;
   }
 
@@ -392,34 +439,6 @@ function renderPlate() {
   plateSummary.classList.remove('hidden');
   plateCount.classList.remove('hidden');
   plateCount.textContent = state.plate.length;
-
-  state.plate.forEach((item) => {
-    const row = document.createElement('div');
-    row.className = 'plate-item';
-
-    row.innerHTML = `
-      ${item.photo ? `<img class="plate-item-image" src="images/${item.photo}" alt="${item.name}">` : `<div class="plate-item-image plate-item-image-placeholder"></div>`}
-      <div class="plate-item-main">
-        <div class="plate-item-top">
-          <div class="plate-item-name">${item.name}</div>
-          ${item.price ? `<div class="plate-item-price">${item.price} ₽</div>` : ''}
-        </div>
-        ${typeof item.kcal === 'number' ? `<div class="plate-item-sub">${Math.round(item.kcal)} ккал</div>` : ''}
-      </div>
-      <button class="plate-remove" data-id="${item.plateId}" type="button">Убрать</button>
-    `;
-
-    const removeBtn = row.querySelector('.plate-remove');
-    if (removeBtn) {
-      removeBtn.onclick = () => {
-  state.plate = state.plate.filter(x => x.plateId !== item.plateId);
-  updateQuickAddStates();
-  renderPlate();
-};
-    }
-
-    plateList.appendChild(row);
-  });
 
   const totals = state.plate.reduce((acc, item) => {
     acc.kcal += item.kcal || 0;
@@ -441,6 +460,7 @@ function renderPlate() {
   if (summaryMacros) {
     summaryMacros.textContent = `${Math.round(totals.kcal)} ккал · Б ${fmt(totals.p)} · Ж ${fmt(totals.f)} · У ${fmt(totals.c)}`;
   }
+
   updatePlatePreview();
 }
 
